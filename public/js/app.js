@@ -24,11 +24,13 @@ const App = {
     window.SemrushMatrix.renderVelocityChart();
     window.SemrushMatrix.renderAdGapAnalysis();
     window.StrategyGenerator.generatePrompt();
+    if (window.AgentTeam) window.AgentTeam.init();
+    if (window.CampaignBuilder) window.CampaignBuilder.init();
   },
 
   async switchTab(tabId) {
     this.activeTab = tabId;
-    const tabs = ['board', 'matrix', 'kanban', 'generator'];
+    const tabs = ['board', 'matrix', 'kanban', 'generator', 'agentTeam', 'campaign'];
     tabs.forEach(t => {
       const content = document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1));
       const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
@@ -62,6 +64,10 @@ const App = {
       window.SemrushMatrix.renderKeywordCloud(this.filters.niche);
     } else if (tabId === 'generator') {
       window.StrategyGenerator.generatePrompt();
+    } else if (tabId === 'agentTeam') {
+      if (window.AgentTeam) window.AgentTeam.init();
+    } else if (tabId === 'campaign') {
+      if (window.CampaignBuilder) window.CampaignBuilder.init();
     }
   },
 

@@ -12,6 +12,8 @@ const metaAdsService = require('./services/metaAdsService');
 const aiService = require('./services/aiService');
 const benchmarkService = require('./services/benchmarkService');
 const swipeService = require('./services/swipeService');
+const agentTeamService = require('./services/agentTeamService');
+const campaignService = require('./services/campaignService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,10 +25,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Healthcheck
 app.get('/api/health', (req, res) => {
   res.json({
+    name: 'Sunlight Researcher',
     status: 'ok',
     uptime: process.uptime(),
-    version: '1.0.0',
-    metaApiEngine: 'Active (v21.0 compatibility)'
+    version: '2.0.0',
+    metaApiEngine: 'Active (v21.0 compatibility)',
+    autonomousAgents: '5 Agents Active'
   });
 });
 
@@ -182,6 +186,48 @@ app.get('/api/swipe/export/markdown', (req, res) => {
   res.send(md);
 });
 
+// 8. Autonomous Multi-Agent AI Team Endpoints
+app.get('/api/agents', (req, res) => {
+  res.json({
+    success: true,
+    agents: agentTeamService.getAgents()
+  });
+});
+
+app.get('/api/agents/logs', (req, res) => {
+  res.json({
+    success: true,
+    logs: agentTeamService.getActivityLog()
+  });
+});
+
+app.post('/api/agents/investigate', async (req, res) => {
+  try {
+    const { topic, niche } = req.body;
+    const result = await agentTeamService.runTeamInvestigation(topic, niche);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 9. Meta & Google Ads Campaign Intelligence Builder
+app.post('/api/campaigns/blueprint', async (req, res) => {
+  try {
+    const { niche, productName, platform, targetGoal, country } = req.body;
+    const blueprint = await campaignService.generateCampaignBlueprint({
+      niche,
+      productName,
+      platform,
+      targetGoal,
+      country
+    });
+    res.json(blueprint);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Fallback to index.html for SPA routing
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -190,9 +236,9 @@ app.use((req, res) => {
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================================`);
-  console.log(`🚀 META ADS INTELLIGENCE & COMPETITOR SPY SERVER`);
+  console.log(`☀️  SUNLIGHT RESEARCHER — INTELLIGENCE PLATFORM`);
   console.log(`🌐 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Inspired by Semrush Analytics & Monday.com Boards`);
-  console.log(`🤖 AI Copilot & Strategy Capsule Generator Ready`);
+  console.log(`🤖 Autonomous Multi-Agent AI Team Active`);
+  console.log(`🎯 Meta & Google Ads Campaign Builder Engine Ready`);
   console.log(`====================================================`);
 });

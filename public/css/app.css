@@ -1,37 +1,70 @@
 /* =========================================================================
-   MONDAY.COM DESIGN SYSTEM STYLESHEET
-   Colors, Typography & Components exact to Monday.com inspection specs
+   SUNLIGHT RESEARCHER DESIGN SYSTEM STYLESHEET
+   Typography: Inter (body & UI) + Poppins (headings & titles)
+   Colors & Components: Sunlight Studio Architecture
    ========================================================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
+
 :root {
-  --monday-primary: #0073ea;
-  --monday-primary-hover: #0060b9;
-  --monday-text: #323338;
-  --monday-text-secondary: #676879;
-  --monday-text-muted: #808191;
-  --monday-bg-sidebar: #f5f6fa;
-  --monday-bg-surface: #ffffff;
-  --monday-bg-hover: #f0f3f9;
-  --monday-bg-active: #cce5ff;
-  --monday-border: #d0d4e4;
-  --monday-border-light: #e6e9ef;
+  /* Sunlight Brand Palette */
+  --sunlight-gold: #f59e0b;
+  --sunlight-gold-hover: #d97706;
+  --sunlight-gold-light: #fef3c7;
+  --sunlight-primary: #0073ea;
+  --sunlight-primary-hover: #0060b9;
+  --sunlight-text: #1e293b;
+  --sunlight-text-secondary: #64748b;
+  --sunlight-text-muted: #94a3b8;
+  --sunlight-bg-sidebar: #f8fafc;
+  --sunlight-bg-surface: #ffffff;
+  --sunlight-bg-hover: #f1f5f9;
+  --sunlight-bg-active: #e0f2fe;
+  --sunlight-border: #e2e8f0;
+  --sunlight-border-light: #f1f5f9;
   
-  /* Monday Status Cell Colors */
-  --status-done: #00c875;
-  --status-working: #fdab3d;
-  --status-stuck: #e2445c;
-  --status-info: #0086c0;
+  /* Status Tier Colors */
+  --status-scaling: #00c875;
+  --status-steady: #0086c0;
+  --status-testing: #fdab3d;
+  --status-paused: #e2445c;
   --status-purple: #a25ddc;
-  --status-dark: #333333;
+  --status-dark: #334155;
+
+  /* Backward Compatibility Aliases */
+  --monday-primary: var(--sunlight-primary);
+  --monday-primary-hover: var(--sunlight-primary-hover);
+  --monday-text: var(--sunlight-text);
+  --monday-text-secondary: var(--sunlight-text-secondary);
+  --monday-text-muted: var(--sunlight-text-muted);
+  --monday-bg-sidebar: var(--sunlight-bg-sidebar);
+  --monday-bg-surface: var(--sunlight-bg-surface);
+  --monday-bg-hover: var(--sunlight-bg-hover);
+  --monday-bg-active: var(--sunlight-bg-active);
+  --monday-border: var(--sunlight-border);
+  --monday-border-light: var(--sunlight-border-light);
+  --status-done: var(--status-scaling);
+  --status-working: var(--status-testing);
+  --status-stuck: var(--status-paused);
+  --status-info: var(--status-steady);
 }
 
 body {
-  color: var(--monday-text);
-  font-family: Figtree, Poppins, Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  letter-spacing: -0.01em;
+  color: var(--sunlight-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.011em;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Monday Scrollbars */
+/* Headings with Poppins */
+h1, h2, h3, h4, h5, h6, .font-heading, .brand-title {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Sleek Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -40,14 +73,14 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c3c6d4;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a0a4b8;
+  background: #94a3b8;
 }
 
-/* Monday Status Pill Cell */
+/* Status Pill Cell */
 .status-pill {
   height: 32px;
   display: flex;
@@ -57,7 +90,7 @@ body {
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.02em;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: opacity 0.15s ease, transform 0.15s ease;
   user-select: none;
 }
@@ -67,111 +100,134 @@ body {
 }
 
 .status-pill-scaling {
-  background-color: var(--status-done);
+  background-color: var(--status-scaling);
 }
 .status-pill-steady {
-  background-color: var(--status-info);
+  background-color: var(--status-steady);
 }
 .status-pill-testing {
-  background-color: var(--status-working);
+  background-color: var(--status-testing);
 }
 .status-pill-paused {
-  background-color: var(--status-stuck);
+  background-color: var(--status-paused);
 }
 
 /* Left Sidebar Items */
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  padding: 6px 12px;
-  border-radius: 6px;
-  color: var(--monday-text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--sunlight-text);
   font-size: 13px;
   font-weight: 500;
   transition: all 0.15s ease;
   cursor: pointer;
 }
 .sidebar-nav-item:hover {
-  background-color: var(--monday-bg-hover);
+  background-color: var(--sunlight-bg-hover);
 }
 .sidebar-nav-item.active {
-  background-color: var(--monday-bg-active);
-  color: var(--monday-primary);
+  background-color: var(--sunlight-bg-active);
+  color: var(--sunlight-primary);
   font-weight: 600;
 }
 
-/* Monday Table Styles */
-.monday-table th {
+/* Intelligence Table Styles */
+.monday-table th, .sunlight-table th {
   font-size: 12px;
   font-weight: 600;
-  color: var(--monday-text-secondary);
-  border-right: 1px solid var(--monday-border-light);
-  border-bottom: 1px solid var(--monday-border);
-  padding: 8px 10px;
+  color: var(--sunlight-text-secondary);
+  border-right: 1px solid var(--sunlight-border-light);
+  border-bottom: 1px solid var(--sunlight-border);
+  padding: 10px 12px;
   text-align: center;
+  font-family: 'Poppins', sans-serif;
 }
-.monday-table th:first-child {
+.monday-table th:first-child, .sunlight-table th:first-child {
   text-align: left;
 }
-.monday-table td {
+.monday-table td, .sunlight-table td {
   font-size: 13px;
-  color: var(--monday-text);
-  border-right: 1px solid var(--monday-border-light);
-  border-bottom: 1px solid var(--monday-border-light);
-  padding: 6px 8px;
+  color: var(--sunlight-text);
+  border-right: 1px solid var(--sunlight-border-light);
+  border-bottom: 1px solid var(--sunlight-border-light);
+  padding: 8px 10px;
   vertical-align: middle;
 }
-.monday-table tr:hover td {
-  background-color: #f7f9fd;
+.monday-table tr:hover td, .sunlight-table tr:hover td {
+  background-color: #f8fafc;
 }
 
-/* Monday Group Vertical Bar Indicator */
+/* Group Vertical Bar Indicator */
 .group-bar-scaling {
-  border-left: 6px solid var(--status-done);
+  border-left: 6px solid var(--status-scaling);
 }
 .group-bar-steady {
-  border-left: 6px solid var(--status-info);
+  border-left: 6px solid var(--status-steady);
 }
 .group-bar-testing {
-  border-left: 6px solid var(--status-working);
+  border-left: 6px solid var(--status-testing);
 }
 
-/* Primary Monday Buttons */
-.btn-monday-primary {
-  background-color: var(--monday-primary);
+/* Buttons */
+.btn-monday-primary, .btn-sunlight-primary {
+  background: linear-gradient(135deg, #0073ea 0%, #005bb5 100%);
   color: #ffffff;
   font-weight: 600;
   font-size: 13px;
-  border-radius: 4px;
-  padding: 6px 14px;
-  transition: background-color 0.15s ease;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.btn-monday-primary:hover {
-  background-color: var(--monday-primary-hover);
+.btn-monday-primary:hover, .btn-sunlight-primary:hover {
+  background: linear-gradient(135deg, #0060b9 0%, #004b94 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.btn-monday-secondary {
+.btn-sunlight-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.btn-sunlight-gold:hover {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+}
+
+.btn-monday-secondary, .btn-sunlight-secondary {
   background-color: #ffffff;
-  border: 1px solid var(--monday-border);
-  color: var(--monday-text);
+  border: 1px solid var(--sunlight-border);
+  color: var(--sunlight-text);
   font-weight: 500;
   font-size: 13px;
-  border-radius: 4px;
-  padding: 6px 12px;
+  border-radius: 6px;
+  padding: 7px 14px;
   transition: all 0.15s ease;
 }
-.btn-monday-secondary:hover {
-  background-color: var(--monday-bg-hover);
-  border-color: #b0b4c8;
+.btn-monday-secondary:hover, .btn-sunlight-secondary:hover {
+  background-color: var(--sunlight-bg-hover);
+  border-color: #cbd5e1;
 }
 
-/* Tab Underline for Monday */
-.tab-monday-active {
-  border-bottom: 2px solid var(--monday-primary);
-  color: var(--monday-primary);
+/* Tab Underline */
+.tab-monday-active, .tab-sunlight-active {
+  border-bottom: 2px solid var(--sunlight-primary);
+  color: var(--sunlight-primary);
   font-weight: 600;
 }
 
@@ -181,7 +237,7 @@ body {
 }
 .ad-card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
 }
 
 /* Pulse Animation */

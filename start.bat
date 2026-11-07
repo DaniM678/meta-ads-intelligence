@@ -1,8 +1,8 @@
 @echo off
-title Meta Ads Intelligence Platform - Sunlight Studio
+title Sunlight Researcher - Sunlight Studio
 color 0b
 echo ===============================================================================
-echo        SUNLIGHT STUDIO - META ADS INTELLIGENCE & COMPETITOR SPY
+echo        SUNLIGHT RESEARCHER - AD INTELLIGENCE & CAMPAIGN ENGINEERING
 echo ===============================================================================
 echo.
 

@@ -88,6 +88,36 @@ const API = {
   async removeFromSwipe(adId) {
     const res = await fetch(`/api/swipe/${adId}`, { method: 'DELETE' });
     return await res.json();
+  },
+
+  // Sunlight Autonomous Multi-Agent AI Team
+  async fetchAgents() {
+    const res = await fetch('/api/agents');
+    return await res.json();
+  },
+
+  async fetchAgentLogs() {
+    const res = await fetch('/api/agents/logs');
+    return await res.json();
+  },
+
+  async investigateAgentTeam(topic, niche = 'general') {
+    const res = await fetch('/api/agents/investigate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, niche })
+    });
+    return await res.json();
+  },
+
+  // Meta & Google Ads Campaign Intelligence Blueprint
+  async generateCampaignBlueprint(params = {}) {
+    const res = await fetch('/api/campaigns/blueprint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+    return await res.json();
   }
 };
 
