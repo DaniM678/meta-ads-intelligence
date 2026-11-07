@@ -69,9 +69,70 @@ class AiService {
   }
 
   /**
+   * Optional Live OpenAI GPT-4o Integration for Copilot
+   */
+  async callOpenAi(userMessage, conversationHistory = []) {
+    const apiKey = process.env.OPENAI_API_KEY.trim();
+    const allAds = metaAdsService.cachedAds || [];
+    const topAds = allAds.slice(0, 8);
+    const contextAds = topAds.map(a => `- ${a.brand}: ${a.active_days} zile active (${a.format_label}). Hook: "${a.headline}". Ofertă: "${a.offer}". Unghi: ${a.hook_type}`).join('\n');
+
+    const systemPrompt = `Ești AI Spy Copilot, un Senior Direct-Response Strategist și Media Buyer de talie mondială.
+Ai acces direct la baza de date de reclame spionate din Meta Ads Library a competitorilor.
+Iată un eșantion cu cele mai scalate reclame din baza de date:
+${contextAds}
+
+Răspunde utilizatorului în limba Română, strategic, orientat pe conversie și direct-response.
+Folosește formatare clară cu markdown (bold, tabele, liste, emoji-uri).
+Dacă utilizatorul cere idei de reclame, dă-i hook-uri specifice de 0-3 secunde, mecanisme unice și structuri de ofertă cu risc inversat.`;
+
+    const formattedHistory = (conversationHistory || []).slice(-6).map(h => ({
+      role: h.sender === 'user' ? 'user' : 'assistant',
+      content: h.text || ''
+    }));
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...formattedHistory,
+          { role: 'user', content: userMessage }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000
+      })
+    });
+
+    const data = await response.json();
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      return {
+        message: data.choices[0].message.content,
+        action: null
+      };
+    }
+    throw new Error(data.error ? data.error.message : 'Eroare la generarea răspunsului OpenAI');
+  }
+
+  /**
    * Process a message from the user in the AI Copilot Chat
    */
   async handleCopilotMessage(userMessage, conversationHistory = []) {
+    // If OPENAI_API_KEY is configured in .env, use real GPT-4o / GPT-4o-mini
+    if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().startsWith('sk-')) {
+      try {
+        const liveAiResponse = await this.callOpenAi(userMessage, conversationHistory);
+        return liveAiResponse;
+      } catch (err) {
+        console.warn('OpenAI API call failed, falling back to heuristic engine:', err.message);
+      }
+    }
+
     const q = userMessage.toLowerCase().trim();
     const allAds = metaAdsService.cachedAds;
 

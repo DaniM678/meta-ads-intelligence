@@ -200,7 +200,7 @@ const App = {
     }
 
     try {
-      const data = await window.API.semanticSearch(query);
+      const data = await window.API.semanticSearch(query, this.accessToken);
       if (data.success) {
         this.currentAds = data.ads;
         window.MondayBoard.renderGrid(this.currentAds);

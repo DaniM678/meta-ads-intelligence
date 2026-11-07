@@ -17,11 +17,11 @@ const API = {
   },
 
   // AI Semantic Search
-  async semanticSearch(query) {
+  async semanticSearch(query, accessToken = '') {
     const res = await fetch('/api/ai/semantic-search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query, accessToken })
     });
     return await res.json();
   },

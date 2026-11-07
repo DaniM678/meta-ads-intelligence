@@ -40,13 +40,16 @@ class MetaAdsService {
   }) {
     let ads = [];
 
-    // If live token is provided, query Meta Graph API
-    if (accessToken && accessToken.trim().startsWith('EAA')) {
+    const effectiveToken = (accessToken && accessToken.trim()) || process.env.META_ACCESS_TOKEN || null;
+    const effectiveCountry = country || process.env.META_TARGET_COUNTRY || 'RO';
+
+    // If live token is provided or configured in .env, query Meta Graph API
+    if (effectiveToken && effectiveToken.trim().startsWith('EAA')) {
       try {
         ads = await this.fetchFromMetaGraphApi({
-          accessToken,
+          accessToken: effectiveToken.trim(),
           searchTerms,
-          country
+          country: effectiveCountry
         });
       } catch (apiErr) {
         console.warn('Meta Graph API request failed, falling back to local database:', apiErr.message);
@@ -127,14 +130,15 @@ class MetaAdsService {
     url.searchParams.set('fields', fields);
     url.searchParams.set('limit', '50');
 
-    if (searchTerms && searchTerms.trim() !== '') {
-      url.searchParams.set('search_terms', searchTerms.trim());
-    }
+    // Meta Ads Archive requires either search_terms or search_page_ids
+    const queryTerm = (searchTerms && searchTerms.trim() !== '') ? searchTerms.trim() : 'oferta';
+    url.searchParams.set('search_terms', queryTerm);
 
     const response = await fetch(url.toString());
     const data = await response.json();
 
     if (data.error) {
+      console.error('Meta API Error Details:', data.error);
       throw new Error(`Meta API Error [${data.error.code}]: ${data.error.message}`);
     }
 

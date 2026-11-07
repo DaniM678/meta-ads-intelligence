@@ -3,6 +3,7 @@
  * Express full-stack API server + frontend static host
  */
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -78,9 +79,10 @@ app.get('/api/ads/:id', (req, res) => {
 // 3. AI Natural Language Semantic Search
 app.post('/api/ai/semantic-search', async (req, res) => {
   try {
-    const { query } = req.body;
+    const { query, accessToken } = req.body;
     const parsed = aiService.parseSemanticQuery(query);
     const ads = await metaAdsService.searchAds({
+      accessToken,
       searchTerms: parsed.filters.searchTerms,
       longevity: parsed.filters.longevity,
       format: parsed.filters.format,
