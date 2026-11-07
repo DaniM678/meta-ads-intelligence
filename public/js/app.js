@@ -32,17 +32,25 @@ const App = {
     tabs.forEach(t => {
       const content = document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1));
       const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+      const sideItem = document.getElementById('sideNav' + t.charAt(0).toUpperCase() + t.slice(1));
+
       if (t === tabId) {
         if (content) content.classList.remove('hidden');
         if (btn) {
-          btn.classList.add('tab-active');
-          btn.classList.remove('text-slate-500');
+          btn.classList.add('tab-monday-active');
+          btn.classList.remove('text-[#676879]');
+        }
+        if (sideItem) {
+          sideItem.classList.add('active');
         }
       } else {
         if (content) content.classList.add('hidden');
         if (btn) {
-          btn.classList.remove('tab-active');
-          btn.classList.add('text-slate-500');
+          btn.classList.remove('tab-monday-active');
+          btn.classList.add('text-[#676879]');
+        }
+        if (sideItem) {
+          sideItem.classList.remove('active');
         }
       }
     });
@@ -61,19 +69,31 @@ const App = {
     this.viewLayout = mode;
     const grid = document.getElementById('adsGridContainer');
     const table = document.getElementById('adsTableContainer');
-    const btnGrid = document.getElementById('btnLayoutGrid');
-    const btnTable = document.getElementById('btnLayoutTable');
+    const btnBoard = document.getElementById('tabBtnBoard');
+    const btnGrid = document.getElementById('tabBtnGrid');
 
     if (mode === 'grid') {
       if (grid) grid.classList.remove('hidden');
       if (table) table.classList.add('hidden');
-      if (btnGrid) btnGrid.className = 'p-1.5 rounded bg-slate-100 text-blue-600';
-      if (btnTable) btnTable.className = 'p-1.5 rounded text-slate-400 hover:bg-slate-100';
+      if (btnGrid) {
+        btnGrid.classList.add('tab-monday-active');
+        btnGrid.classList.remove('text-[#676879]');
+      }
+      if (btnBoard) {
+        btnBoard.classList.remove('tab-monday-active');
+        btnBoard.classList.add('text-[#676879]');
+      }
     } else {
       if (grid) grid.classList.add('hidden');
       if (table) table.classList.remove('hidden');
-      if (btnTable) btnTable.className = 'p-1.5 rounded bg-slate-100 text-blue-600';
-      if (btnGrid) btnGrid.className = 'p-1.5 rounded text-slate-400 hover:bg-slate-100';
+      if (btnBoard) {
+        btnBoard.classList.add('tab-monday-active');
+        btnBoard.classList.remove('text-[#676879]');
+      }
+      if (btnGrid) {
+        btnGrid.classList.remove('tab-monday-active');
+        btnGrid.classList.add('text-[#676879]');
+      }
     }
   },
 

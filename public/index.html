@@ -3,596 +3,654 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meta Ads Spy & Competitor Intelligence Platform</title>
+  <title>Monday Ad Intelligence &amp; Competitor Spy</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="stylesheet" href="/css/app.css">
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans antialiased h-full flex flex-col overflow-hidden">
+<body class="bg-white text-[#323338] font-sans antialiased h-full flex flex-col overflow-hidden select-none">
 
-  <!-- TOP NAVIGATION HEADER (Monday & Semrush Inspired) -->
-  <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs shrink-0 z-30">
-    <div class="flex items-center space-x-6">
-      <!-- Logo & Brand -->
-      <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </div>
-        <div>
-          <div class="flex items-center space-x-2">
-            <h1 class="text-base font-bold text-slate-900 tracking-tight">ADSPY INTELLIGENCE</h1>
-            <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Semrush x Monday Engine</span>
-          </div>
-          <p class="text-xs text-slate-500">Meta Ads Library Deep Reverse-Engineering &amp; AI Strategy Extractor</p>
-        </div>
+  <!-- ================= TOP GLOBAL HEADER (Monday.com Exact Header) ================= -->
+  <header class="bg-[#f5f6fa] border-b border-[#d0d4e4] px-4 py-2 flex items-center justify-between shrink-0 z-30 h-12">
+    <!-- Left Logo & Product -->
+    <div class="flex items-center space-x-3">
+      <!-- Monday Flower Logo -->
+      <div class="flex items-center space-x-1.5 cursor-pointer">
+        <svg class="w-6 h-6" viewBox="0 0 40 40" fill="none">
+          <circle cx="10" cy="18" r="4.5" fill="#e2445c"/>
+          <circle cx="20" cy="12" r="4.5" fill="#fdab3d"/>
+          <circle cx="30" cy="18" r="4.5" fill="#00c875"/>
+          <circle cx="15" cy="27" r="4.5" fill="#0073ea"/>
+          <circle cx="25" cy="27" r="4.5" fill="#a25ddc"/>
+        </svg>
+        <span class="font-bold text-sm tracking-tight text-[#323338]">monday <span class="font-normal text-[#676879]">ad intelligence</span></span>
       </div>
 
-      <!-- Quick Niche Selector -->
-      <div class="hidden md:flex items-center space-x-2 bg-slate-100/80 p-1 rounded-lg border border-slate-200/80">
-        <span class="text-xs font-medium text-slate-500 px-2">Nișă:</span>
-        <select id="nicheSelect" onchange="window.App.changeNiche(this.value)" class="text-xs font-semibold bg-white border border-slate-200 rounded-md px-2.5 py-1 text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-          <option value="all">Toate Nișele (Multi-Competitor)</option>
-          <option value="fitness" selected>Fitness &amp; Suplimente (Gymshark, MyProtein, Alpha)</option>
-          <option value="saas">SaaS &amp; B2B (Monday, Semrush, Notion)</option>
-          <option value="beauty">Skincare &amp; Beauty DTC (Curology, Hims)</option>
-          <option value="ecommerce">E-Commerce &amp; Gadgeturi (PeakDesign, Revolut)</option>
-        </select>
+      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-100/70 text-[#0073ea] border border-blue-200">
+        💎 Pro Active
+      </span>
+    </div>
+
+    <!-- Center Search Bar (Quick Search) -->
+    <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+      <div class="relative w-full">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#676879]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <input type="text" id="aiSearchInput" onkeydown="if(event.key==='Enter') window.App.executeAiSearch()" placeholder="Căutare inteligentă AI: 'Reclame video active de peste 45 zile cu discount'..." class="w-full pl-9 pr-16 py-1.5 bg-white border border-[#d0d4e4] rounded-md text-xs text-[#323338] placeholder-[#808191] focus:outline-none focus:ring-2 focus:ring-[#0073ea] focus:border-transparent transition">
+        <button onclick="window.App.executeAiSearch()" class="absolute right-1 top-1 px-2 py-0.5 bg-[#0073ea] hover:bg-[#0060b9] text-white rounded text-[10px] font-semibold transition">
+          Caută AI
+        </button>
       </div>
     </div>
 
-    <!-- Actions: API Connect, Export & Copilot -->
-    <div class="flex items-center space-x-3">
-      <!-- Live Meta API Status Pill -->
-      <button onclick="window.App.openApiModal()" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-blue-400 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 shadow-2xs transition">
-        <span id="apiStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
-        <span id="apiStatusText" class="font-semibold text-slate-800">Meta API: Mock Mode Activ</span>
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    <!-- Right Controls (Notifications, Help, Profile) -->
+    <div class="flex items-center space-x-2.5">
+      <!-- Live Meta API Pill -->
+      <button onclick="window.App.openApiModal()" class="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-white border border-[#d0d4e4] hover:bg-slate-50 text-xs font-medium text-[#323338] shadow-2xs transition cursor-pointer">
+        <span id="apiStatusDot" class="w-2 h-2 rounded-full bg-[#00c875] pulse-dot"></span>
+        <span id="apiStatusText" class="font-semibold text-[11px]">Meta API: Mock Mode</span>
       </button>
 
-      <!-- Strategy Capsule Quick Export Button -->
-      <button onclick="window.App.switchTab('generator')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        <span>Exportă în Alt AI</span>
+      <!-- Quick AI Copilot Toggle -->
+      <button onclick="window.AiCopilot.toggle()" class="flex items-center space-x-1.5 px-3 py-1 rounded bg-[#0073ea] hover:bg-[#0060b9] text-white text-xs font-semibold shadow-2xs transition cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span>monday AI Copilot</span>
       </button>
 
-      <!-- AI Copilot Chat Toggle -->
-      <button onclick="window.AiCopilot.toggle()" id="copilotBtn" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold shadow-sm transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-        <span>AI Spy Copilot</span>
-        <span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">Smart</span>
+      <div class="h-5 w-px bg-[#d0d4e4] mx-1"></div>
+
+      <!-- Icon Buttons -->
+      <button class="p-1.5 rounded-full hover:bg-[#e6e9ef] text-[#676879] transition" title="Notificări">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
       </button>
+      <button class="p-1.5 rounded-full hover:bg-[#e6e9ef] text-[#676879] transition" title="Ajutor">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </button>
+
+      <!-- User Avatar -->
+      <div class="w-7 h-7 rounded-full bg-[#0073ea] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+        D
+      </div>
     </div>
   </header>
 
-  <!-- SECONDARY BAR: SEMRUSH KPI INTELLIGENCE STRIP -->
-  <section class="bg-white border-b border-slate-200 px-6 py-2.5 flex items-center justify-between shrink-0 overflow-x-auto text-xs">
-    <div class="flex items-center space-x-6 min-w-max">
-      <!-- Stat 1: Total Ads -->
-      <div class="flex items-center space-x-2.5">
-        <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+  <!-- ================= MAIN LAYOUT WITH LEFT MONDAY SIDEBAR ================= -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- LEFT SIDEBAR (Monday administration / navigation layout) -->
+    <aside class="w-60 bg-[#f5f6fa] border-r border-[#d0d4e4] flex flex-col shrink-0 overflow-y-auto p-3 space-y-4 select-none">
+      
+      <!-- Workspace Switcher Pill -->
+      <div class="flex items-center justify-between p-2 rounded-lg bg-white border border-[#d0d4e4] shadow-2xs">
+        <div class="flex items-center space-x-2 truncate">
+          <div class="w-5 h-5 rounded bg-gradient-to-tr from-[#0073ea] to-[#a25ddc] text-white flex items-center justify-center text-[10px] font-bold">M</div>
+          <select id="nicheSelect" onchange="window.App.changeNiche(this.value)" class="text-xs font-semibold text-[#323338] bg-transparent focus:outline-none cursor-pointer truncate">
+            <option value="fitness" selected>Fitness &amp; DTC (Gymshark, MyProtein)</option>
+            <option value="saas">SaaS &amp; B2B (Monday, Semrush, Notion)</option>
+            <option value="beauty">Skincare &amp; Beauty (Curology, Hims)</option>
+            <option value="ecommerce">E-Commerce (PeakDesign, Revolut)</option>
+            <option value="all">Toate Nișele (Global)</option>
+          </select>
         </div>
-        <div>
-          <span class="text-slate-400 block text-[11px] font-medium">Reclame Monitorizate</span>
-          <span id="kpiTotalAds" class="text-slate-800 font-bold text-sm">-- Reclame</span>
+        <button onclick="window.App.openApiModal()" class="w-5 h-5 rounded bg-[#0073ea] text-white flex items-center justify-center text-xs font-bold hover:bg-[#0060b9] transition shrink-0" title="Adaugă / Conectează Competitor">+</button>
+      </div>
+
+      <!-- Navigation Group 1: Core Boards -->
+      <div class="space-y-1">
+        <div class="px-2 text-[11px] font-bold uppercase tracking-wider text-[#808191] flex items-center justify-between">
+          <span>Boards Competitori</span>
+          <svg class="w-3.5 h-3.5 text-[#808191]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+
+        <div onclick="window.App.switchTab('board')" id="sideNavBoard" class="sidebar-nav-item active">
+          <svg class="w-4 h-4 mr-2 text-[#0073ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span class="truncate">Reclame Concurență</span>
+        </div>
+
+        <div onclick="window.App.switchTab('matrix')" id="sideNavMatrix" class="sidebar-nav-item">
+          <svg class="w-4 h-4 mr-2 text-[#676879]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="truncate">Semrush Benchmark</span>
+        </div>
+
+        <div onclick="window.App.switchTab('kanban')" id="sideNavKanban" class="sidebar-nav-item">
+          <svg class="w-4 h-4 mr-2 text-[#676879]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+          <span class="truncate">Pipeline Pâlnie (Kanban)</span>
+        </div>
+
+        <div onclick="window.App.switchTab('kanban')" class="sidebar-nav-item">
+          <svg class="w-4 h-4 mr-2 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <span class="truncate">⭐ Swipe File (Salvate)</span>
         </div>
       </div>
 
-      <div class="h-6 w-px bg-slate-200"></div>
-
-      <!-- Stat 2: Avg Active Longevity -->
-      <div class="flex items-center space-x-2.5">
-        <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <!-- Navigation Group 2: Monday AI Tools (Exact from Screenshot 1 & 2) -->
+      <div class="space-y-1">
+        <div class="px-2 text-[11px] font-bold uppercase tracking-wider text-[#808191] flex items-center justify-between">
+          <span>monday AI</span>
+          <span class="text-[9px] bg-gradient-to-r from-purple-500 to-pink-500 text-white px-1.5 py-0.2 rounded font-bold">New</span>
         </div>
-        <div>
-          <span class="text-slate-400 block text-[11px] font-medium">Longevitate Medie (Validare ROAS)</span>
-          <span id="kpiAvgLongevity" class="text-slate-800 font-bold text-sm">-- Zile active</span>
-        </div>
-      </div>
 
-      <div class="h-6 w-px bg-slate-200"></div>
-
-      <!-- Stat 3: Top Hook Archetype -->
-      <div class="flex items-center space-x-2.5">
-        <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+        <div onclick="window.AiCopilot.toggle()" class="sidebar-nav-item">
+          <span class="text-purple-600 mr-2 text-sm">✦</span>
+          <span class="truncate">AI Spy Copilot</span>
         </div>
-        <div>
-          <span class="text-slate-400 block text-[11px] font-medium">Unghi Psihologic Dominant</span>
-          <span id="kpiTopAngle" class="text-indigo-700 font-bold text-sm">Problem-Agitation (42%)</span>
-        </div>
-      </div>
 
-      <div class="h-6 w-px bg-slate-200"></div>
-
-      <!-- Stat 4: Dominant Platform -->
-      <div class="flex items-center space-x-2.5">
-        <div class="w-7 h-7 rounded-lg bg-pink-50 text-pink-600 flex items-center justify-center font-bold">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <div onclick="window.App.switchTab('generator')" id="sideNavGenerator" class="sidebar-nav-item">
+          <span class="text-blue-600 mr-2 text-sm">✦</span>
+          <span class="truncate">AI Strategy Capsule</span>
         </div>
-        <div>
-          <span class="text-slate-400 block text-[11px] font-medium">Canal Preferat de Scalare</span>
-          <span class="text-slate-800 font-bold text-sm">Instagram Reels (68%)</span>
+
+        <div onclick="window.App.switchTab('generator'); window.StrategyGenerator.setFormat('ugc')" class="sidebar-nav-item">
+          <span class="text-pink-600 mr-2 text-sm">✦</span>
+          <span class="truncate">AI Video Storyboard</span>
+        </div>
+
+        <div onclick="window.App.switchTab('matrix')" class="sidebar-nav-item">
+          <span class="text-amber-600 mr-2 text-sm">✦</span>
+          <span class="truncate">Ad Gap Detector</span>
         </div>
       </div>
-    </div>
 
-    <!-- Active Filter Indicator & Reset -->
-    <div class="flex items-center space-x-2 pl-4">
-      <span id="activeFilterBadge" class="hidden px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold">
-        Filtru Activ: <span id="filterDesc">Reclame >45 zile</span>
-      </span>
-      <button onclick="window.App.resetFilters()" class="text-xs font-medium text-slate-500 hover:text-slate-800 underline cursor-pointer">Resetează filtrele</button>
-    </div>
-  </section>
-
-  <!-- NAVIGATION TABS (Monday.com Style) -->
-  <div class="bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
-    <div class="flex space-x-8 text-xs">
-      <button onclick="window.App.switchTab('board')" id="tabBtnBoard" class="py-3 px-1 tab-active flex items-center space-x-2 transition cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        <span>📋 Monday Board (Tabel Inteligent)</span>
-      </button>
-
-      <button onclick="window.App.switchTab('matrix')" id="tabBtnMatrix" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        <span>📊 Semrush Analytics &amp; Head-to-Head</span>
-      </button>
-
-      <button onclick="window.App.switchTab('kanban')" id="tabBtnKanban" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
-        <span>🗂️ Funnel Pipeline (Kanban)</span>
-      </button>
-
-      <button onclick="window.App.switchTab('generator')" id="tabBtnGenerator" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        <span>🤖 AI Strategy Capsule (Export to Claude/GPT)</span>
-      </button>
-    </div>
-
-    <!-- View Mode Switch -->
-    <div class="flex items-center space-x-1 py-2">
-      <button onclick="window.App.setViewLayout('grid')" id="btnLayoutGrid" class="p-1.5 rounded bg-slate-100 text-blue-600 hover:bg-slate-200 transition" title="Vizualizare Carduri Ad">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-      </button>
-      <button onclick="window.App.setViewLayout('table')" id="btnLayoutTable" class="p-1.5 rounded text-slate-400 hover:bg-slate-100 transition" title="Vizualizare Tabel Compact">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- AI NATURAL LANGUAGE SEARCH & FILTER BAR -->
-  <section class="bg-white/90 backdrop-blur-xs border-b border-slate-200 px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
-    <!-- Natural Language AI Search Bar -->
-    <div class="flex-1 relative">
-      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <!-- Navigation Group 3: Settings & Integrations -->
+      <div class="space-y-1 pt-2 border-t border-[#d0d4e4]">
+        <div onclick="window.App.openApiModal()" class="sidebar-nav-item">
+          <svg class="w-4 h-4 mr-2 text-[#676879]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="truncate">Meta Ads API Config</span>
+        </div>
       </div>
-      <input type="text" id="aiSearchInput" onkeydown="if(event.key==='Enter') window.App.executeAiSearch()" placeholder="Căutare inteligentă AI: 'Reclame video active de peste 45 zile cu reducere' sau 'hook de curiozitate'..." class="w-full pl-10 pr-24 py-2 bg-slate-100/70 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition shadow-2xs">
-      <button onclick="window.App.executeAiSearch()" class="absolute right-1.5 top-1.5 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-semibold flex items-center space-x-1 transition shadow-xs">
-        <span>Caută AI</span>
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-      </button>
-    </div>
+    </aside>
 
-    <!-- Quick Filter Pills -->
-    <div class="flex items-center space-x-2 overflow-x-auto text-xs shrink-0">
-      <span class="text-[11px] font-medium text-slate-400">Longevitate:</span>
-      <button onclick="window.App.setLongevityFilter('all')" id="fltAll" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 font-semibold cursor-pointer">Toate</button>
-      <button onclick="window.App.setLongevityFilter('scaling')" id="fltScaling" class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-semibold cursor-pointer">🔥 Scaling (&gt;45z)</button>
-      <button onclick="window.App.setLongevityFilter('steady')" id="fltSteady" class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-semibold cursor-pointer">⚡ Steady (20-45z)</button>
-      <button onclick="window.App.setLongevityFilter('testing')" id="fltTesting" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 font-semibold cursor-pointer">🔬 Testare (&lt;20z)</button>
+    <!-- RIGHT MAIN WORKSPACE -->
+    <div class="flex-1 flex flex-col overflow-hidden bg-white">
 
-      <span class="text-slate-300">|</span>
+      <!-- ================= BOARD HEADER & VIEW TABS ================= -->
+      <div class="px-6 pt-4 pb-0 border-b border-[#d0d4e4] shrink-0 bg-white">
+        <!-- Title & Star/Info -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-3">
+            <h1 class="text-xl font-bold text-[#323338] tracking-tight flex items-center space-x-2">
+              <span>Competitor Ad Intelligence (Meta Library)</span>
+              <button class="text-[#808191] hover:text-amber-500 transition">★</button>
+            </h1>
+          </div>
 
-      <span class="text-[11px] font-medium text-slate-400">Format:</span>
-      <select id="formatFilter" onchange="window.App.applyFilters()" class="px-2 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:outline-none">
-        <option value="all">Toate formatele</option>
-        <option value="video">9:16 Video / Reels</option>
-        <option value="carousel">Carusel Imagini</option>
-        <option value="image">Static Image</option>
-        <option value="ugc">UGC Lo-Fi Style</option>
-      </select>
-    </div>
-  </section>
+          <!-- Quick Metrics Badges -->
+          <div class="flex items-center space-x-4 text-xs">
+            <div class="flex items-center space-x-1.5">
+              <span class="text-[#676879]">Reclame Active:</span>
+              <span id="kpiTotalAds" class="font-bold text-[#323338]">--</span>
+            </div>
+            <div class="h-4 w-px bg-[#d0d4e4]"></div>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-[#676879]">Longevitate Medie:</span>
+              <span id="kpiAvgLongevity" class="font-bold text-[#00c875]">--</span>
+            </div>
+          </div>
+        </div>
 
-  <!-- MAIN VIEWPORT CONTAINER -->
-  <main class="flex-1 flex overflow-hidden relative">
-
-    <!-- PRIMARY SCROLL AREA -->
-    <div class="flex-1 overflow-y-auto p-6" id="mainScrollArea">
-
-      <!-- ================= TAB 1: MONDAY BOARD (CARDS / TABLE) ================= -->
-      <div id="tabContentBoard" class="space-y-6">
+        <!-- Monday View Tabs Row -->
         <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-base font-bold text-slate-900">Reclame Concurență Monitorizate</h2>
-            <p class="text-xs text-slate-500">Clasificate conform principiului longevității active continuă &amp; variații de unghi</p>
-          </div>
-          <div class="flex items-center space-x-2 text-xs">
-            <span class="text-slate-500">Sortare:</span>
-            <select id="sortBy" onchange="window.App.applyFilters()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-2xs">
-              <option value="longevity-desc">Cele mai longevive (&gt;60z)</option>
-              <option value="longevity-asc">Cele mai noi (&lt;7z)</option>
-              <option value="brand">Competitor (A-Z)</option>
-              <option value="roas">Scor ROAS Estimat</option>
-            </select>
-          </div>
-        </div>
+          <div class="flex space-x-6 text-xs">
+            <button onclick="window.App.switchTab('board')" id="tabBtnBoard" class="pb-3 px-1 tab-monday-active flex items-center space-x-1.5 transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Main Table</span>
+            </button>
 
-        <!-- Cards Grid -->
-        <div id="adsGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          <!-- Populated via MondayBoard.renderGrid -->
-        </div>
+            <button onclick="window.App.setViewLayout('grid'); window.App.switchTab('board')" id="tabBtnGrid" class="pb-3 px-1 text-[#676879] hover:text-[#323338] flex items-center space-x-1.5 transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+              <span>Cards (Media Preview)</span>
+            </button>
 
-        <!-- Monday Table -->
-        <div id="adsTableContainer" class="hidden bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold">
-                <th class="py-3 px-4">Previzualizare</th>
-                <th class="py-3 px-4">Brand / Pagina</th>
-                <th class="py-3 px-4">Status &amp; Zile Active</th>
-                <th class="py-3 px-4">Hook Principal</th>
-                <th class="py-3 px-4">Unghi Psihologic</th>
-                <th class="py-3 px-4">Canale</th>
-                <th class="py-3 px-4">Ofertă &amp; CTA</th>
-                <th class="py-3 px-4 text-right">Acțiuni</th>
-              </tr>
-            </thead>
-            <tbody id="adsTableBody" class="divide-y divide-slate-200">
-              <!-- Populated via MondayBoard.renderTable -->
-            </tbody>
-          </table>
+            <button onclick="window.App.switchTab('matrix')" id="tabBtnMatrix" class="pb-3 px-1 text-[#676879] hover:text-[#323338] flex items-center space-x-1.5 transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <span>Semrush Matrix</span>
+            </button>
+
+            <button onclick="window.App.switchTab('kanban')" id="tabBtnKanban" class="pb-3 px-1 text-[#676879] hover:text-[#323338] flex items-center space-x-1.5 transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+              <span>Kanban Funnel</span>
+            </button>
+
+            <button onclick="window.App.switchTab('generator')" id="tabBtnGenerator" class="pb-3 px-1 text-[#676879] hover:text-[#323338] flex items-center space-x-1.5 transition cursor-pointer">
+              <span class="text-blue-600">✦</span>
+              <span>AI Strategy Generator</span>
+            </button>
+          </div>
+
+          <div class="flex items-center space-x-2 pb-2">
+            <span id="activeFilterBadge" class="hidden text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+              Filtru: <span id="filterDesc">Scaling</span>
+            </span>
+            <button onclick="window.App.resetFilters()" class="text-xs text-[#676879] hover:underline cursor-pointer">Resetează</button>
+          </div>
         </div>
       </div>
 
-      <!-- ================= TAB 2: SEMRUSH ANALYTICS & MATRIX ================= -->
-      <div id="tabContentMatrix" class="hidden space-y-6">
-        <div>
-          <h2 class="text-base font-bold text-slate-900">Semrush Competitor Intelligence Matrix</h2>
-          <p class="text-xs text-slate-500">Comparație directă head-to-head pe volum, longevitate, unghiuri și cuvinte-cheie psihologice</p>
+      <!-- ================= MONDAY ACTION TOOLBAR ================= -->
+      <div class="px-6 py-2.5 border-b border-[#e6e9ef] flex flex-wrap items-center justify-between gap-2 bg-[#fcfdfe] text-xs">
+        <div class="flex items-center space-x-2">
+          <!-- Split Add Item Button -->
+          <button onclick="window.App.openApiModal()" class="btn-monday-primary flex items-center space-x-1 cursor-pointer">
+            <span>+ Reclamă Nouă</span>
+          </button>
+
+          <!-- Board Longevity Filter Pills -->
+          <div class="flex items-center bg-[#f0f3f9] p-0.5 rounded border border-[#d0d4e4]">
+            <button onclick="window.App.setLongevityFilter('all')" id="fltAll" class="px-2.5 py-1 rounded text-xs font-semibold bg-[#0073ea] text-white">Toate</button>
+            <button onclick="window.App.setLongevityFilter('scaling')" id="fltScaling" class="px-2.5 py-1 rounded text-xs font-semibold text-[#323338] hover:bg-white">🔥 Scaling (>45z)</button>
+            <button onclick="window.App.setLongevityFilter('steady')" id="fltSteady" class="px-2.5 py-1 rounded text-xs font-semibold text-[#323338] hover:bg-white">⚡ Steady (20-45z)</button>
+            <button onclick="window.App.setLongevityFilter('testing')" id="fltTesting" class="px-2.5 py-1 rounded text-xs font-semibold text-[#323338] hover:bg-white">🔬 Testare (<20z)</button>
+          </div>
+
+          <!-- Format Selector -->
+          <select id="formatFilter" onchange="window.App.applyFilters()" class="btn-monday-secondary text-xs font-medium cursor-pointer">
+            <option value="all">Toate formatele</option>
+            <option value="video">9:16 Video / Reels</option>
+            <option value="carousel">Carusel Imagini</option>
+            <option value="image">Static Image</option>
+            <option value="ugc">UGC Lo-Fi Style</option>
+          </select>
         </div>
 
-        <!-- Head-to-Head Comparison Table -->
-        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs p-5">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Competitor Benchmark Matrix</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+        <!-- Sort and Export Actions -->
+        <div class="flex items-center space-x-2">
+          <span class="text-[#676879]">Sortare:</span>
+          <select id="sortBy" onchange="window.App.applyFilters()" class="btn-monday-secondary text-xs font-semibold cursor-pointer">
+            <option value="longevity-desc">Cele mai longevive (&gt;60z)</option>
+            <option value="longevity-asc">Cele mai noi (&lt;7z)</option>
+            <option value="brand">Competitor (A-Z)</option>
+            <option value="roas">Scor ROAS Estimat</option>
+          </select>
+
+          <button onclick="window.App.switchTab('generator')" class="btn-monday-secondary flex items-center space-x-1 cursor-pointer text-[#0073ea]">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Export AI</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= SCROLLABLE CONTENT VIEWPORT ================= -->
+      <div class="flex-1 overflow-y-auto p-6" id="mainScrollArea">
+
+        <!-- TAB 1: MONDAY BOARD (TABLE & CARDS) -->
+        <div id="tabContentBoard" class="space-y-6">
+          
+          <!-- Monday Table View -->
+          <div id="adsTableContainer" class="bg-white border border-[#d0d4e4] rounded-lg overflow-hidden shadow-xs">
+            <table class="w-full text-left border-collapse monday-table text-xs">
               <thead>
-                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 font-semibold">
-                  <th class="py-2.5 px-4">Competitor</th>
-                  <th class="py-2.5 px-4">Total Reclame Active</th>
-                  <th class="py-2.5 px-4">Longevitate Medie</th>
-                  <th class="py-2.5 px-4">Rata Reclame &gt;45z (Evergreen)</th>
-                  <th class="py-2.5 px-4">Mix Video Reels</th>
-                  <th class="py-2.5 px-4">Unghi Psihologic Principal</th>
-                  <th class="py-2.5 px-4">Nivel Agresivitate Ofertă</th>
+                <tr class="bg-[#f5f6fa] text-[#676879]">
+                  <th class="w-10">
+                    <input type="checkbox" class="rounded text-[#0073ea]">
+                  </th>
+                  <th style="min-width: 280px;">Reclamă / Hook Principal</th>
+                  <th style="width: 140px;">Competitor</th>
+                  <th style="width: 150px;">Status (Longevitate)</th>
+                  <th style="width: 140px;">Unghi Psihologic</th>
+                  <th style="width: 120px;">Format</th>
+                  <th style="width: 100px;">Platforme</th>
+                  <th style="width: 90px;">Iterații</th>
+                  <th style="width: 110px;">Scor ROAS</th>
+                  <th style="width: 100px;">Acțiuni</th>
                 </tr>
               </thead>
-              <tbody id="matrixTableBody" class="divide-y divide-slate-100 font-medium">
-                <!-- Dynamically rendered via SemrushMatrix -->
+              <tbody id="adsTableBody">
+                <!-- Injected dynamically via MondayBoard.renderTable with Monday group headers -->
               </tbody>
             </table>
           </div>
+
+          <!-- Cards Grid View (Hidden by default, shown when Cards tab selected) -->
+          <div id="adsGridContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <!-- Populated dynamically via MondayBoard.renderGrid -->
+          </div>
+
         </div>
 
-        <!-- Keyword Cloud & Ad Gap Analysis -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">🔥 Top Cuvinte-Cheie Emoționale (Hook Copy)</h3>
-            <p class="text-xs text-slate-400 mb-4">Cuvinte cel mai des întâlnite în primele 2 rânduri ale reclamelor de succes</p>
-            <div id="keywordCloud" class="flex flex-wrap gap-2">
-              <!-- Dynamically rendered via SemrushMatrix -->
+        <!-- TAB 2: SEMRUSH MATRIX -->
+        <div id="tabContentMatrix" class="hidden space-y-6">
+          <div>
+            <h2 class="text-base font-bold text-[#323338]">Semrush Competitor Intelligence Matrix</h2>
+            <p class="text-xs text-[#676879]">Comparație directă head-to-head pe volum, longevitate, unghiuri și cuvinte-cheie psihologice</p>
+          </div>
+
+          <!-- Head-to-Head Comparison Table -->
+          <div class="bg-white border border-[#d0d4e4] rounded-lg overflow-hidden shadow-xs p-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#676879] mb-4">Competitor Benchmark Matrix</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-[#d0d4e4] bg-[#f5f6fa] text-[#676879] font-semibold">
+                    <th class="py-2.5 px-4">Competitor</th>
+                    <th class="py-2.5 px-4">Total Reclame Active</th>
+                    <th class="py-2.5 px-4">Longevitate Medie</th>
+                    <th class="py-2.5 px-4">Rata Reclame &gt;45z (Evergreen)</th>
+                    <th class="py-2.5 px-4">Mix Video Reels</th>
+                    <th class="py-2.5 px-4">Unghi Psihologic Principal</th>
+                    <th class="py-2.5 px-4">Nivel Agresivitate Ofertă</th>
+                  </tr>
+                </thead>
+                <tbody id="matrixTableBody" class="divide-y divide-[#e6e9ef] font-medium">
+                  <!-- Rendered via SemrushMatrix -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">🌊 Semrush Ad Gap Analysis (Oportunități Ocean Albastru)</h3>
-            <p class="text-xs text-slate-400 mb-4">Unghiuri psihologice cu competiție redusă pe care le poți exploata</p>
-            <div id="adGapContainer" class="space-y-2.5">
-              <!-- Dynamically rendered via SemrushMatrix -->
+          <!-- Keyword Cloud & Ad Gap Analysis -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="bg-white border border-[#d0d4e4] rounded-lg p-5 shadow-xs">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#676879] mb-2">🔥 Top Cuvinte-Cheie Emoționale (Hook Copy)</h3>
+              <p class="text-xs text-[#808191] mb-4">Cuvinte cel mai des întâlnite în primele 2 rânduri ale reclamelor de succes</p>
+              <div id="keywordCloud" class="flex flex-wrap gap-2">
+                <!-- Rendered via SemrushMatrix -->
+              </div>
+            </div>
+
+            <div class="bg-white border border-[#d0d4e4] rounded-lg p-5 shadow-xs">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#676879] mb-2">🌊 Semrush Ad Gap Analysis (Oportunități Ocean Albastru)</h3>
+              <p class="text-xs text-[#808191] mb-4">Unghiuri psihologice cu competiție redusă pe care le poți exploata</p>
+              <div id="adGapContainer" class="space-y-2.5">
+                <!-- Rendered via SemrushMatrix -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Launch Velocity Chart -->
+          <div class="bg-white border border-[#d0d4e4] rounded-lg p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#676879]">Creative Launch Velocity &amp; Seasonality</h3>
+                <p class="text-xs text-[#808191]">Când testează competitorii noi reclame (valuri de lansare pe ultimele 6 luni)</p>
+              </div>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-blue-50 text-[#0073ea] font-semibold">Activitate Intensă: Septembrie - Noiembrie</span>
+            </div>
+            <div class="h-44 w-full relative flex items-end justify-between px-4 pb-2 border-b border-[#d0d4e4]" id="velocityChartContainer">
+              <!-- Rendered via SemrushMatrix -->
+            </div>
+            <div class="flex justify-between text-[11px] text-[#808191] mt-2 px-4">
+              <span>Iunie</span>
+              <span>Iulie</span>
+              <span>August</span>
+              <span>Septembrie</span>
+              <span>Octombrie</span>
+              <span>Noiembrie (Curent)</span>
             </div>
           </div>
         </div>
 
-        <!-- Launch Velocity Chart -->
-        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+        <!-- TAB 3: KANBAN FUNNEL PIPELINE -->
+        <div id="tabContentKanban" class="hidden overflow-x-auto pb-4">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Creative Launch Velocity &amp; Seasonality</h3>
-              <p class="text-xs text-slate-400">Când testează competitorii noi reclame (valuri de lansare pe ultimele 6 luni)</p>
+              <h2 class="text-base font-bold text-[#323338]">Pipeline Pâlnie de Conversie (Kanban)</h2>
+              <p class="text-xs text-[#676879]">Segmentarea reclamelor pe etape de conștientizare (Eugene Schwartz: Unaware ➔ Most Aware)</p>
             </div>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold">Activitate Intensă: Septembrie - Noiembrie</span>
           </div>
-          <div class="h-48 w-full relative flex items-end justify-between px-4 pb-2 border-b border-slate-200" id="velocityChartContainer">
-            <!-- Bars drawn via SemrushMatrix -->
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-400 mt-2 px-4">
-            <span>Iunie</span>
-            <span>Iulie</span>
-            <span>August</span>
-            <span>Septembrie</span>
-            <span>Octombrie</span>
-            <span>Noiembrie (Curent)</span>
+
+          <div class="flex space-x-4 min-w-max">
+            <!-- TOF -->
+            <div class="kanban-col bg-[#f5f6fa] rounded-lg p-3 border border-[#d0d4e4] flex flex-col max-h-[75vh]">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#d0d4e4]">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-[#a25ddc]"></span>
+                  <span class="text-xs font-bold text-[#323338]">Top of Funnel (Problem/Story)</span>
+                </div>
+                <span id="kbCountTof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-[#676879] border border-[#d0d4e4]">0</span>
+              </div>
+              <div id="kanbanTofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+            </div>
+
+            <!-- MOF -->
+            <div class="kanban-col bg-[#f5f6fa] rounded-lg p-3 border border-[#d0d4e4] flex flex-col max-h-[75vh]">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#d0d4e4]">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-[#0086c0]"></span>
+                  <span class="text-xs font-bold text-[#323338]">Middle of Funnel (Mechanism/Demo)</span>
+                </div>
+                <span id="kbCountMof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-[#676879] border border-[#d0d4e4]">0</span>
+              </div>
+              <div id="kanbanMofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+            </div>
+
+            <!-- BOF -->
+            <div class="kanban-col bg-[#f5f6fa] rounded-lg p-3 border border-[#d0d4e4] flex flex-col max-h-[75vh]">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#d0d4e4]">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-[#00c875]"></span>
+                  <span class="text-xs font-bold text-[#323338]">Bottom of Funnel (Offer/Social Proof)</span>
+                </div>
+                <span id="kbCountBof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-[#676879] border border-[#d0d4e4]">0</span>
+              </div>
+              <div id="kanbanBofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+            </div>
+
+            <!-- Swipe File -->
+            <div class="kanban-col bg-[#f5f6fa] rounded-lg p-3 border border-[#d0d4e4] flex flex-col max-h-[75vh]">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#d0d4e4]">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-[#fdab3d]"></span>
+                  <span class="text-xs font-bold text-[#323338]">⭐ Swipe File (Salvate pentru Noi)</span>
+                </div>
+                <span id="kbCountSwipe" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-[#676879] border border-[#d0d4e4]">0</span>
+              </div>
+              <div id="kanbanSwipeList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ================= TAB 3: FUNNEL PIPELINE (KANBAN) ================= -->
-      <div id="tabContentKanban" class="hidden overflow-x-auto pb-4">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h2 class="text-base font-bold text-slate-900">Pipeline Pâlnie de Conversie (Kanban)</h2>
-            <p class="text-xs text-slate-500">Segmentarea reclamelor pe etape de conștientizare (Eugene Schwartz: Unaware ➔ Most Aware)</p>
-          </div>
-          <span class="text-xs text-slate-400">Organizează reclamele pentru moodboard-ul tău</span>
-        </div>
-
-        <div class="flex space-x-4 min-w-max">
-          <!-- Col 1: TOF -->
-          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
-            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
-              <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-                <span class="text-xs font-bold text-slate-800">Top of Funnel (Problem/Story)</span>
+        <!-- TAB 4: AI STRATEGY CAPSULE GENERATOR -->
+        <div id="tabContentGenerator" class="hidden space-y-6 max-w-5xl mx-auto">
+          <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-xl p-6 shadow-md">
+            <div class="flex items-start justify-between">
+              <div class="space-y-2">
+                <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/30 text-blue-200 text-[11px] font-semibold border border-blue-400/30">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  <span>Meta Ads Library API v21.0 Reverse-Engineering</span>
+                </div>
+                <h2 class="text-xl font-bold">Generator Prompt &amp; Capsulă Strategică pentru AI</h2>
+                <p class="text-xs text-blue-200 max-w-2xl">
+                  Transformă automat cele mai longevive reclame ale concurenților în structuri clare, unghiuri de atac și storyboard-uri pe care le poți introduce direct în <b>ChatGPT, Claude 3.5 Sonnet, Midjourney sau Runway</b> pentru a crea reclame superioare.
+                </p>
               </div>
-              <span id="kbCountTof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
+              <button onclick="window.StrategyGenerator.generatePrompt()" class="px-4 py-2 bg-[#00c875] hover:opacity-90 text-white rounded-md text-xs font-bold shadow-xs flex items-center space-x-1.5 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span>Regenerează din Reclame</span>
+              </button>
             </div>
-            <div id="kanbanTofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
           </div>
 
-          <!-- Col 2: MOF -->
-          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
-            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
-              <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-blue-500"></span>
-                <span class="text-xs font-bold text-slate-800">Middle of Funnel (Mechanism/Demo)</span>
+          <!-- Format Selector Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="window.StrategyGenerator.setFormat('copywriter')" id="btnStratCopy" class="p-4 bg-white border-2 border-[#0073ea] rounded-lg text-left shadow-2xs transition cursor-pointer">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-[#0073ea] uppercase tracking-wider">Formatul 1</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#0073ea]"></span>
               </div>
-              <span id="kbCountMof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
-            </div>
-            <div id="kanbanMofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
-          </div>
+              <h4 class="text-sm font-bold text-[#323338]">Master Copywriting Prompt</h4>
+              <p class="text-xs text-[#676879] mt-1">Pentru ChatGPT / Claude: Generează 5 unghiuri noi de text bazate pe cele mai longevive reclame.</p>
+            </button>
 
-          <!-- Col 3: BOF -->
-          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
-            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
-              <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                <span class="text-xs font-bold text-slate-800">Bottom of Funnel (Offer/Social Proof)</span>
+            <button onclick="window.StrategyGenerator.setFormat('ugc')" id="btnStratUgc" class="p-4 bg-white border border-[#d0d4e4] hover:border-slate-400 rounded-lg text-left shadow-2xs transition cursor-pointer">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-[#808191] uppercase tracking-wider">Formatul 2</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-[#d0d4e4]"></span>
               </div>
-              <span id="kbCountBof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
-            </div>
-            <div id="kanbanBofList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
-          </div>
+              <h4 class="text-sm font-bold text-[#323338]">Storyboard Video UGC (0-60s)</h4>
+              <p class="text-xs text-[#676879] mt-1">Script secvență cu secvență (Hook 0-3s, Agitare, Mecanism, Dovadă, Ofertă) pentru creatori.</p>
+            </button>
 
-          <!-- Col 4: Swipe File -->
-          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
-            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
-              <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-                <span class="text-xs font-bold text-slate-800">⭐ Swipe File (Salvate pentru Noi)</span>
+            <button onclick="window.StrategyGenerator.setFormat('json')" id="btnStratJson" class="p-4 bg-white border border-[#d0d4e4] hover:border-slate-400 rounded-lg text-left shadow-2xs transition cursor-pointer">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-[#808191] uppercase tracking-wider">Formatul 3</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-[#d0d4e4]"></span>
               </div>
-              <span id="kbCountSwipe" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
-            </div>
-            <div id="kanbanSwipeList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= TAB 4: AI STRATEGY CAPSULE GENERATOR ================= -->
-      <div id="tabContentGenerator" class="hidden space-y-6 max-w-5xl mx-auto">
-        <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md">
-          <div class="flex items-start justify-between">
-            <div class="space-y-2">
-              <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/30 text-blue-200 text-[11px] font-semibold border border-blue-400/30">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                <span>Sursă date: Meta Ads Library API Archive v21.0</span>
-              </div>
-              <h2 class="text-xl font-bold">Generator Prompt &amp; Capsulă Strategică pentru AI</h2>
-              <p class="text-xs text-blue-200 max-w-2xl">
-                Transformă automat cele mai longevive reclame ale concurenților în structuri clare, unghiuri de atac și storyboard-uri pe care le poți introduce direct în <b>ChatGPT, Claude 3.5 Sonnet, Midjourney sau Runway</b> pentru a crea reclame superioare.
-              </p>
-            </div>
-            <button onclick="window.StrategyGenerator.generatePrompt()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm flex items-center space-x-1.5 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Regenerează din Reclame</span>
+              <h4 class="text-sm font-bold text-[#323338]">Capsulă Date Structurate (JSON)</h4>
+              <p class="text-xs text-[#676879] mt-1">Export API compatibil cu vector databases, agenți autonomi și pipeline-uri n8n / Make.</p>
             </button>
           </div>
-        </div>
 
-        <!-- Strategy Options Selector -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button onclick="window.StrategyGenerator.setFormat('copywriter')" id="btnStratCopy" class="p-4 bg-white border-2 border-blue-600 rounded-xl text-left shadow-2xs transition">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Formatul 1</span>
-              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+          <!-- Prompt Output -->
+          <div class="bg-white border border-[#d0d4e4] rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-[#f5f6fa] px-5 py-3 border-b border-[#d0d4e4] flex items-center justify-between">
+              <span class="text-xs font-bold text-[#323338] flex items-center space-x-2">
+                <span class="text-[#00c875]">✦</span>
+                <span id="promptTitle">Prompt Master Direct-Response pentru Claude 3.5 Sonnet / GPT-4o</span>
+              </span>
+              <div class="flex items-center space-x-2">
+                <button onclick="window.StrategyGenerator.copyPrompt()" id="copyPromptBtn" class="btn-monday-secondary flex items-center space-x-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-[#0073ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <span id="copyPromptText">Copiază Promptul</span>
+                </button>
+                <button onclick="window.StrategyGenerator.downloadFile()" class="btn-monday-secondary flex items-center space-x-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-[#676879]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>Descarcă Fișier</span>
+                </button>
+              </div>
             </div>
-            <h4 class="text-sm font-bold text-slate-800">Master Copywriting Prompt</h4>
-            <p class="text-xs text-slate-500 mt-1">Pentru ChatGPT / Claude: Generează 5 unghiuri de text bazate pe hook-urile cu longevitate &gt;60z.</p>
-          </button>
-
-          <button onclick="window.StrategyGenerator.setFormat('ugc')" id="btnStratUgc" class="p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl text-left shadow-2xs transition">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Formatul 2</span>
-              <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-slate-300"></span>
-            </div>
-            <h4 class="text-sm font-bold text-slate-800">Storyboard Video UGC (0-60s)</h4>
-            <p class="text-xs text-slate-500 mt-1">Script secvență cu secvență (Hook 0-3s, Agitare, Mecanism, Dovadă, Ofertă) pentru creatori.</p>
-          </button>
-
-          <button onclick="window.StrategyGenerator.setFormat('json')" id="btnStratJson" class="p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl text-left shadow-2xs transition">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Formatul 3</span>
-              <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-slate-300"></span>
-            </div>
-            <h4 class="text-sm font-bold text-slate-800">Capsulă Date Structurate (JSON)</h4>
-            <p class="text-xs text-slate-500 mt-1">Export API compatibil cu vector databases, agenți autonomi și pipeline-uri n8n / Make.</p>
-          </button>
-        </div>
-
-        <!-- Strategy Prompt Display Box -->
-        <div class="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-          <div class="bg-slate-100/80 px-5 py-3 border-b border-slate-200 flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-700 flex items-center space-x-2">
-              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              <span id="promptTitle">Prompt Master Direct-Response pentru Claude 3.5 Sonnet / GPT-4o</span>
-            </span>
-            <div class="flex items-center space-x-2">
-              <button onclick="window.StrategyGenerator.copyPrompt()" id="copyPromptBtn" class="px-3 py-1 bg-white border border-slate-200 hover:border-blue-400 rounded-lg text-xs font-semibold text-slate-700 shadow-2xs flex items-center space-x-1.5 transition">
-                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                <span id="copyPromptText">Copiază Promptul</span>
-              </button>
-              <button onclick="window.StrategyGenerator.downloadFile()" class="px-3 py-1 bg-white border border-slate-200 hover:border-blue-400 rounded-lg text-xs font-semibold text-slate-700 shadow-2xs flex items-center space-x-1.5 transition">
-                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                <span>Descarcă Fișier</span>
-              </button>
+            <div class="p-5">
+              <textarea id="strategyPromptOutput" readonly class="w-full h-96 font-mono text-xs text-[#323338] bg-[#fcfdfe] border border-[#d0d4e4] rounded p-4 leading-relaxed resize-none focus:outline-none"></textarea>
             </div>
           </div>
-          <div class="p-5">
-            <textarea id="strategyPromptOutput" readonly class="w-full h-96 font-mono text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg p-4 leading-relaxed resize-none focus:outline-none"></textarea>
-          </div>
         </div>
+
       </div>
 
     </div>
 
     <!-- ================= RIGHT COLLAPSIBLE PANEL: AI SPY COPILOT CHAT ================= -->
-    <aside id="copilotPanel" class="w-96 bg-white border-l border-slate-200 flex flex-col shrink-0 shadow-lg z-20 transition-all duration-300">
-      <!-- Copilot Header -->
-      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
-        <div class="flex items-center space-x-2.5">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xs">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <aside id="copilotPanel" class="w-96 bg-white border-l border-[#d0d4e4] flex flex-col shrink-0 shadow-lg z-20 transition-all duration-300">
+      <!-- Header -->
+      <div class="p-3.5 border-b border-[#d0d4e4] flex items-center justify-between bg-[#f5f6fa]">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xs font-bold text-xs">
+            ✦
           </div>
           <div>
-            <h3 class="text-xs font-bold text-slate-900">AI Spy Analyst &amp; Copilot</h3>
-            <p class="text-[11px] text-slate-500">Conectat la datele curente Meta Ads Library</p>
+            <h3 class="text-xs font-bold text-[#323338]">monday AI Spy Copilot</h3>
+            <p class="text-[11px] text-[#808191]">Conectat la datele curente Meta Ads</p>
           </div>
         </div>
-        <button onclick="window.AiCopilot.toggle()" class="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200 transition">
+        <button onclick="window.AiCopilot.toggle()" class="text-[#676879] hover:text-[#323338] p-1 rounded hover:bg-[#e6e9ef] transition cursor-pointer">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
       <!-- Quick Action Chips -->
-      <div class="p-3 border-b border-slate-200 bg-white">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Sugestii Rapide de Întrebări:</span>
+      <div class="p-3 border-b border-[#e6e9ef] bg-white">
+        <span class="text-[10px] font-bold text-[#808191] uppercase tracking-wider block mb-1.5">Sugestii Rapide de Întrebări:</span>
         <div class="flex flex-wrap gap-1.5">
-          <button onclick="window.AiCopilot.sendMessage('Care sunt cele mai vechi 3 reclame și de ce funcționează?')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+          <button onclick="window.AiCopilot.sendMessage('Care sunt cele mai vechi 3 reclame și de ce funcționează?')" class="text-[11px] bg-[#f5f6fa] hover:bg-blue-50 hover:text-[#0073ea] text-[#323338] px-2.5 py-1 rounded transition text-left cursor-pointer border border-[#e6e9ef]">
             🏆 Top 3 reclame longevive
           </button>
-          <button onclick="window.AiCopilot.sendMessage('Analizează oferta principală a competitorilor')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+          <button onclick="window.AiCopilot.sendMessage('Analizează oferta principală a competitorilor')" class="text-[11px] bg-[#f5f6fa] hover:bg-blue-50 hover:text-[#0073ea] text-[#323338] px-2.5 py-1 rounded transition text-left cursor-pointer border border-[#e6e9ef]">
             💰 Oferta concurenței
           </button>
-          <button onclick="window.AiCopilot.sendMessage('Extrage unghiurile pentru a crea promptul de ChatGPT')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+          <button onclick="window.AiCopilot.sendMessage('Extrage unghiurile pentru a crea promptul de ChatGPT')" class="text-[11px] bg-[#f5f6fa] hover:bg-blue-50 hover:text-[#0073ea] text-[#323338] px-2.5 py-1 rounded transition text-left cursor-pointer border border-[#e6e9ef]">
             📝 Extrage unghiurile pentru AI
           </button>
         </div>
       </div>
 
-      <!-- Chat Messages Scroll Container -->
-      <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs bg-slate-50/50">
-        <!-- Initial Assistant Message -->
+      <!-- Chat Messages Container -->
+      <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs bg-[#fbfcfd]">
         <div class="flex items-start space-x-2.5">
-          <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">AI</div>
-          <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-2xs text-slate-800 leading-relaxed space-y-2">
-            <p>Salut! Sunt <b>AI Spy Analyst</b>. Am scanat baza de date Meta Ads Library a competitorilor tăi.</p>
+          <div class="w-6 h-6 rounded-full bg-[#0073ea] text-white flex items-center justify-center text-[10px] font-bold shrink-0">AI</div>
+          <div class="bg-white p-3.5 rounded-xl border border-[#d0d4e4] shadow-2xs text-[#323338] leading-relaxed space-y-2">
+            <p>Salut! Sunt <b>monday AI Spy Copilot</b>. Am scanat baza de reclame a competitorilor tăi din Meta Ads Library.</p>
             <p>Îți pot arăta instant care reclame generează profit susținut (>45 zile active), ce hook-uri convertesc cel mai bine și cum să modelezi ofertele lor pentru campaniile tale.</p>
-            <p class="text-slate-500 text-[11px]">Întreabă-mă orice sau alege o sugestie de mai sus!</p>
+            <p class="text-[#808191] text-[11px]">Întreabă-mă orice sau alege o sugestie de mai sus!</p>
           </div>
         </div>
       </div>
 
-      <!-- Chat Input Field -->
-      <div class="p-3 border-t border-slate-200 bg-white">
+      <!-- Input Form -->
+      <div class="p-3 border-t border-[#d0d4e4] bg-white">
         <form onsubmit="event.preventDefault(); const inp=document.getElementById('chatInput'); window.AiCopilot.sendMessage(inp.value); inp.value='';" class="relative flex items-center">
-          <input type="text" id="chatInput" placeholder="Ex: 'Arată-mi doar reclamele de la Gymshark'..." class="w-full pl-3 pr-10 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white">
-          <button type="submit" class="absolute right-1.5 p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+          <input type="text" id="chatInput" placeholder="Întreabă AI: 'Arată reclamele de la Gymshark'..." class="w-full pl-3 pr-10 py-2 bg-[#f5f6fa] border border-[#d0d4e4] rounded text-xs text-[#323338] placeholder-[#808191] focus:outline-none focus:ring-1 focus:ring-[#0073ea] focus:bg-white transition">
+          <button type="submit" class="absolute right-1.5 p-1.5 bg-[#0073ea] hover:bg-[#0060b9] text-white rounded transition cursor-pointer">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </form>
       </div>
     </aside>
 
-  </main>
+  </div>
 
   <!-- ================= MODAL: META ADS API SETTINGS & CONNECT ================= -->
-  <div id="apiModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl space-y-5">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+  <div id="apiModal" class="hidden fixed inset-0 bg-[#323338]/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg border border-[#d0d4e4] max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-[#e6e9ef]">
         <div class="flex items-center space-x-2.5">
-          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+          <div class="w-8 h-8 rounded bg-blue-50 text-[#0073ea] flex items-center justify-center font-bold">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-slate-900">Configurare Meta Ads Library API</h3>
-            <p class="text-xs text-slate-500">Conectează token-ul oficial Graph API sau folosește Smart Mock</p>
+            <h3 class="text-sm font-bold text-[#323338]">Configurare Meta Ads Library API</h3>
+            <p class="text-xs text-[#676879]">Conectează token-ul oficial Graph API sau folosește Smart Mock</p>
           </div>
         </div>
-        <button onclick="window.App.closeApiModal()" class="text-slate-400 hover:text-slate-600">
+        <button onclick="window.App.closeApiModal()" class="text-[#808191] hover:text-[#323338] cursor-pointer">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
       <div class="space-y-4 text-xs">
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">Mod de Lucru:</label>
+          <label class="block font-semibold text-[#323338] mb-1">Mod de Lucru:</label>
           <div class="grid grid-cols-2 gap-2">
-            <button type="button" onclick="window.App.setApiMode('mock')" id="btnModeMock" class="p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 text-blue-700 font-bold text-left transition">
+            <button type="button" onclick="window.App.setApiMode('mock')" id="btnModeMock" class="p-3 rounded border-2 border-[#0073ea] bg-blue-50/50 text-[#0073ea] font-bold text-left transition cursor-pointer">
               <span>🚀 Smart Mock / Demo Data</span>
-              <p class="font-normal text-[11px] text-slate-500 mt-0.5">Dataset verificat cu reclame reale &amp; metrici calculate</p>
+              <p class="font-normal text-[11px] text-[#676879] mt-0.5">Dataset verificat cu reclame reale &amp; metrici calculate</p>
             </button>
-            <button type="button" onclick="window.App.setApiMode('live')" id="btnModeLive" class="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-left transition">
+            <button type="button" onclick="window.App.setApiMode('live')" id="btnModeLive" class="p-3 rounded border border-[#d0d4e4] hover:border-slate-400 text-[#323338] font-bold text-left transition cursor-pointer">
               <span>🔌 Live Meta Graph API</span>
-              <p class="font-normal text-[11px] text-slate-500 mt-0.5">Interogare directă pe https://graph.facebook.com</p>
+              <p class="font-normal text-[11px] text-[#676879] mt-0.5">Interogare directă pe graph.facebook.com</p>
             </button>
           </div>
         </div>
 
         <div id="liveApiInputs" class="space-y-3 opacity-50 pointer-events-none">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Meta Graph Access Token (User / App Token):</label>
-            <input type="password" id="inputAccessToken" placeholder="EAAB..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500">
-            <p class="text-[10px] text-slate-400 mt-1">Obține un token gratuit din <a href="https://developers.facebook.com/tools/explorer/" target="_blank" class="text-blue-600 underline">Meta Graph API Explorer</a>.</p>
+            <label class="block font-semibold text-[#323338] mb-1">Meta Graph Access Token (User / App Token):</label>
+            <input type="password" id="inputAccessToken" placeholder="EAAB..." class="w-full px-3 py-2 bg-[#f5f6fa] border border-[#d0d4e4] rounded text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[#0073ea]">
+            <p class="text-[10px] text-[#808191] mt-1">Obține un token gratuit din <a href="https://developers.facebook.com/tools/explorer/" target="_blank" class="text-[#0073ea] underline">Meta Graph API Explorer</a>.</p>
           </div>
         </div>
 
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-blue-800 text-[11px] leading-relaxed">
+        <div class="bg-blue-50 border border-blue-200 rounded p-3 text-blue-900 text-[11px] leading-relaxed">
           <p class="font-semibold mb-0.5">💡 Cum funcționează Reverse-Engineering-ul:</p>
-          Meta Ads Library API returnează textele, previzualizările și datele de start. Aplicația noastră calculează automat <b>zilele active continue</b>, identifică clusterele de iterație și clasifică psihologic hook-ul (Problemă, Curiozitate, Ofertă, Dovadă).
+          Meta Ads Library API returnează textele, previzualizările și datele de lansare. Aplicația calculează automat <b>zilele active continue</b>, grupează iterațiile de conținut și clasifică unghiul psihologic de vânzare.
         </div>
       </div>
 
-      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-200">
-        <button onclick="window.App.closeApiModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800">Închide</button>
-        <button onclick="window.App.saveApiSettings()" class="px-4 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-xs transition">Salvează &amp; Sincronizează</button>
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-[#e6e9ef]">
+        <button onclick="window.App.closeApiModal()" class="btn-monday-secondary cursor-pointer">Închide</button>
+        <button onclick="window.App.saveApiSettings()" class="btn-monday-primary cursor-pointer">Salvează &amp; Sincronizează</button>
       </div>
     </div>
   </div>
 
   <!-- ================= MODAL: AD INSPECTOR DEEP-DIVE ================= -->
-  <div id="adModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl border border-slate-200 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="adModal" class="hidden fixed inset-0 bg-[#323338]/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg border border-[#d0d4e4] max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- Modal Header -->
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+      <div class="p-4 bg-[#f5f6fa] border-b border-[#d0d4e4] flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div id="modalBrandAvatar" class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs uppercase">B</div>
+          <div id="modalBrandAvatar" class="w-9 h-9 rounded-full bg-[#323338] text-white flex items-center justify-center font-bold text-xs uppercase">B</div>
           <div>
             <div class="flex items-center space-x-2">
-              <h3 id="modalBrandName" class="text-sm font-bold text-slate-900">Brand Name</h3>
-              <span id="modalActiveStatus" class="monday-badge px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 font-bold">Scaling (78z)</span>
+              <h3 id="modalBrandName" class="text-sm font-bold text-[#323338]">Brand Name</h3>
+              <span id="modalActiveStatus" class="status-pill status-pill-scaling px-2.5 py-0.5 text-[10px] font-bold">Scaling (78z)</span>
             </div>
-            <p id="modalAdId" class="text-[11px] text-slate-400 font-mono">Meta Ad ID: 894192841</p>
+            <p id="modalAdId" class="text-[11px] text-[#808191] font-mono">Meta Ad ID: 894192841</p>
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button onclick="window.App.addCurrentAdToSwipe()" class="px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold flex items-center space-x-1 transition">
-            <span>⭐ Salvează în Swipe File</span>
+          <button onclick="window.App.addCurrentAdToSwipe()" class="btn-monday-secondary flex items-center space-x-1 cursor-pointer">
+            <span>⭐ Salvează în Swipe</span>
           </button>
-          <button onclick="window.App.closeAdModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <button onclick="window.App.closeAdModal()" class="text-[#808191] hover:text-[#323338] p-1 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
@@ -603,56 +661,56 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Left: Preview -->
           <div class="space-y-3">
-            <div class="bg-slate-900 rounded-xl overflow-hidden aspect-[9/14] md:aspect-[4/5] relative flex items-center justify-center border border-slate-200 shadow-inner group">
+            <div class="bg-[#1e1f23] rounded-lg overflow-hidden aspect-[9/14] md:aspect-[4/5] relative flex items-center justify-center border border-[#d0d4e4] shadow-inner group">
               <img id="modalAdImage" src="" alt="Ad Creative Preview" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-                <span id="modalOverlayFormat" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-600/80 w-max mb-1">9:16 Video Reels</span>
+                <span id="modalOverlayFormat" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#0073ea] w-max mb-1">9:16 Video Reels</span>
                 <p id="modalOverlayHook" class="font-bold text-sm leading-tight text-white/95">"Nu mai cumpăra..."</p>
               </div>
             </div>
-            <div class="flex items-center justify-between text-slate-500 text-[11px]">
+            <div class="flex items-center justify-between text-[#676879] text-[11px]">
               <span id="modalPlatformsText">Canale: Instagram Reels, Stories, Facebook</span>
-              <a id="modalMetaLibraryLink" href="#" target="_blank" class="text-blue-600 hover:underline flex items-center space-x-1">
+              <a id="modalMetaLibraryLink" href="#" target="_blank" class="text-[#0073ea] hover:underline flex items-center space-x-1">
                 <span>Vezi în Meta Ads Library</span>
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
             </div>
           </div>
 
-          <!-- Right: Deep Copy & Psychological Architecture -->
+          <!-- Right: Deep Copy & Hook Architecture -->
           <div class="space-y-4">
-            <div class="p-3 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-1">
+            <div class="p-3 bg-indigo-50/70 border border-indigo-200 rounded space-y-1">
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700">🎯 Anatomia Hook-ului (0-3 Secunde)</span>
                 <span id="modalHookArchetype" class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-200 text-indigo-800">Problem-Agitation</span>
               </div>
-              <p id="modalHookExplanation" class="text-indigo-900 font-medium">Capturează atenția prin negarea soluțiilor tradiționale și crearea de curiozitate științifică.</p>
+              <p id="modalHookExplanation" class="text-indigo-950 font-medium">Capturează atenția prin negarea soluțiilor tradiționale și crearea de curiozitate.</p>
             </div>
 
             <div>
-              <span class="text-[11px] font-bold text-slate-600 block mb-1">Textul Reclamei (Primary Text):</span>
-              <div id="modalAdCopy" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl font-sans text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-48 overflow-y-auto">
+              <span class="text-[11px] font-bold text-[#676879] block mb-1">Textul Reclamei (Primary Text):</span>
+              <div id="modalAdCopy" class="p-3 bg-[#f5f6fa] border border-[#d0d4e4] rounded font-sans text-xs leading-relaxed text-[#323338] whitespace-pre-wrap max-h-48 overflow-y-auto">
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Titlu (Headline)</span>
-                <p id="modalHeadline" class="font-bold text-slate-800 text-xs mt-1">Garanție 60 Zile Fără Risc</p>
+              <div class="p-3 bg-[#f5f6fa] border border-[#d0d4e4] rounded">
+                <span class="text-[10px] font-bold text-[#808191] uppercase tracking-wider block">Titlu (Headline)</span>
+                <p id="modalHeadline" class="font-bold text-[#323338] text-xs mt-1">Garanție 60 Zile Fără Risc</p>
               </div>
-              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Buton Call To Action</span>
-                <p id="modalCta" class="font-bold text-blue-600 text-xs mt-1">Comandă Acum (Shop Now)</p>
+              <div class="p-3 bg-[#f5f6fa] border border-[#d0d4e4] rounded">
+                <span class="text-[10px] font-bold text-[#808191] uppercase tracking-wider block">Buton Call To Action</span>
+                <p id="modalCta" class="font-bold text-[#0073ea] text-xs mt-1">Comandă Acum (Shop Now)</p>
               </div>
             </div>
 
-            <div class="p-3.5 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">💰 Structura Ofertei &amp; Risc Zero (Risk Reversal)</span>
+            <div class="p-3 bg-emerald-50/60 border border-emerald-200 rounded space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800">💰 Structura Ofertei &amp; Risc Zero</span>
               <p id="modalOfferDetails" class="text-emerald-950 font-medium text-xs">Bundle 2+1 Gratuit + Transport 24h + Garanție de returnare fără întrebări.</p>
             </div>
 
             <div class="pt-2 flex items-center space-x-2">
-              <button onclick="window.App.stealHookToAi()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center space-x-1.5">
+              <button onclick="window.App.stealHookToAi()" class="btn-monday-primary w-full py-2.5 text-xs font-bold cursor-pointer flex items-center justify-center space-x-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 <span>Generează Prompt AI pe această reclamă</span>
               </button>

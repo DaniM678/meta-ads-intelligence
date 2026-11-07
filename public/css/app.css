@@ -1,38 +1,190 @@
-/* App CSS - Monday.com & Semrush Inspired Aesthetic */
+/* =========================================================================
+   MONDAY.COM DESIGN SYSTEM STYLESHEET
+   Colors, Typography & Components exact to Monday.com inspection specs
+   ========================================================================= */
 
+:root {
+  --monday-primary: #0073ea;
+  --monday-primary-hover: #0060b9;
+  --monday-text: #323338;
+  --monday-text-secondary: #676879;
+  --monday-text-muted: #808191;
+  --monday-bg-sidebar: #f5f6fa;
+  --monday-bg-surface: #ffffff;
+  --monday-bg-hover: #f0f3f9;
+  --monday-bg-active: #cce5ff;
+  --monday-border: #d0d4e4;
+  --monday-border-light: #e6e9ef;
+  
+  /* Monday Status Cell Colors */
+  --status-done: #00c875;
+  --status-working: #fdab3d;
+  --status-stuck: #e2445c;
+  --status-info: #0086c0;
+  --status-purple: #a25ddc;
+  --status-dark: #333333;
+}
+
+body {
+  color: var(--monday-text);
+  font-family: Figtree, Poppins, Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Custom Monday Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.03);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.25);
+  background: #c3c6d4;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.45);
+  background: #a0a4b8;
 }
 
-.monday-badge {
+/* Monday Status Pill Cell */
+.status-pill {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
   font-weight: 600;
+  font-size: 12px;
   letter-spacing: 0.02em;
+  border-radius: 4px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  user-select: none;
+}
+.status-pill:hover {
+  opacity: 0.92;
+  transform: scale(0.99);
+}
+
+.status-pill-scaling {
+  background-color: var(--status-done);
+}
+.status-pill-steady {
+  background-color: var(--status-info);
+}
+.status-pill-testing {
+  background-color: var(--status-working);
+}
+.status-pill-paused {
+  background-color: var(--status-stuck);
+}
+
+/* Left Sidebar Items */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
   border-radius: 6px;
+  color: var(--monday-text);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.sidebar-nav-item:hover {
+  background-color: var(--monday-bg-hover);
+}
+.sidebar-nav-item.active {
+  background-color: var(--monday-bg-active);
+  color: var(--monday-primary);
+  font-weight: 600;
+}
+
+/* Monday Table Styles */
+.monday-table th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--monday-text-secondary);
+  border-right: 1px solid var(--monday-border-light);
+  border-bottom: 1px solid var(--monday-border);
+  padding: 8px 10px;
+  text-align: center;
+}
+.monday-table th:first-child {
+  text-align: left;
+}
+.monday-table td {
+  font-size: 13px;
+  color: var(--monday-text);
+  border-right: 1px solid var(--monday-border-light);
+  border-bottom: 1px solid var(--monday-border-light);
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+.monday-table tr:hover td {
+  background-color: #f7f9fd;
+}
+
+/* Monday Group Vertical Bar Indicator */
+.group-bar-scaling {
+  border-left: 6px solid var(--status-done);
+}
+.group-bar-steady {
+  border-left: 6px solid var(--status-info);
+}
+.group-bar-testing {
+  border-left: 6px solid var(--status-working);
+}
+
+/* Primary Monday Buttons */
+.btn-monday-primary {
+  background-color: var(--monday-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 4px;
+  padding: 6px 14px;
+  transition: background-color 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-monday-primary:hover {
+  background-color: var(--monday-primary-hover);
 }
 
+.btn-monday-secondary {
+  background-color: #ffffff;
+  border: 1px solid var(--monday-border);
+  color: var(--monday-text);
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  transition: all 0.15s ease;
+}
+.btn-monday-secondary:hover {
+  background-color: var(--monday-bg-hover);
+  border-color: #b0b4c8;
+}
+
+/* Tab Underline for Monday */
+.tab-monday-active {
+  border-bottom: 2px solid var(--monday-primary);
+  color: var(--monday-primary);
+  font-weight: 600;
+}
+
+/* Card Hover Elevation */
 .ad-card-hover {
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .ad-card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
+/* Pulse Animation */
 .pulse-dot {
   animation: pulseAnim 2s infinite ease-in-out;
 }
@@ -41,28 +193,7 @@
   50% { opacity: 0.5; transform: scale(1.15); }
 }
 
-.tab-active {
-  border-bottom: 2px solid #0073ea;
-  color: #0073ea;
-  font-weight: 600;
-}
-
 .kanban-col {
-  min-width: 320px;
-  max-width: 360px;
-}
-
-/* Line clamp helpers */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  min-width: 310px;
+  max-width: 340px;
 }
