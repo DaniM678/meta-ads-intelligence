@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="ro" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Ads Spy & Competitor Intelligence Engine</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.03);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.25);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.45);
+    }
+    .monday-badge {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ad-card-hover {
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ad-card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.12);
+    }
+    .pulse-dot {
+      animation: pulseAnim 2s infinite ease-in-out;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.15); }
+    }
+    .tab-active {
+      border-bottom: 2px solid #0073ea;
+      color: #0073ea;
+      font-weight: 600;
+    }
+    .kanban-col {
+      min-width: 320px;
+      max-width: 360px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased h-full flex flex-col overflow-hidden">
+
+  <!-- TOP NAVIGATION HEADER (Monday & Semrush Inspired) -->
+  <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs shrink-0 z-30">
+    <div class="flex items-center space-x-6">
+      <!-- Logo & Branding -->
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-bold text-slate-900 tracking-tight">ADSPY INTELLIGENCE</h1>
+            <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Semrush x Monday Engine</span>
+          </div>
+          <p class="text-xs text-slate-500">Meta Ads Library Deep Reverse-Engineering & AI Strategy Extractor</p>
+        </div>
+      </div>
+
+      <!-- Quick Niche / Competitor Selector -->
+      <div class="hidden md:flex items-center space-x-2 bg-slate-100/80 p-1 rounded-lg border border-slate-200/80">
+        <span class="text-xs font-medium text-slate-500 px-2">Nișă:</span>
+        <select id="nicheSelect" onchange="changeNiche(this.value)" class="text-xs font-semibold bg-white border border-slate-200 rounded-md px-2.5 py-1 text-slate-800 shadow-2xs focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+          <option value="all">Toate Nișele (Multi-Competitor)</option>
+          <option value="fitness" selected>Fitness & Suplimente (Gymshark, MyProtein, Alpha)</option>
+          <option value="saas">SaaS & B2B (Monday, Semrush, Notion, ClickUp)</option>
+          <option value="beauty">Skincare & Beauty DTC (Curology, Hims, Glossier)</option>
+          <option value="ecommerce">E-Commerce & Gadgeturi (PeakDesign, Anker)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Actions, Search & Copilot Toggle -->
+    <div class="flex items-center space-x-3">
+      <!-- Live Meta API Status Pill -->
+      <button onclick="openApiModal()" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-blue-400 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 shadow-2xs transition">
+        <span id="apiStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+        <span id="apiStatusText" class="font-semibold text-slate-800">Meta API: Mock Mode Activ</span>
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </button>
+
+      <!-- Strategy Capsule Quick Export Button -->
+      <button onclick="openStrategyModal()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span>Exportă în Alt AI</span>
+      </button>
+
+      <!-- AI Copilot Chat Toggle -->
+      <button onclick="toggleCopilot()" id="copilotBtn" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        <span>AI Spy Copilot</span>
+        <span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">Smart</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- SECONDARY BAR: SEMRUSH KPI INTELLIGENCE STRIP -->
+  <section class="bg-white border-b border-slate-200 px-6 py-2.5 flex items-center justify-between shrink-0 overflow-x-auto text-xs">
+    <div class="flex items-center space-x-6 min-w-max">
+      <!-- Stat 1: Total Ads -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-[11px] font-medium">Reclame Monitorizate</span>
+          <span id="kpiTotalAds" class="text-slate-800 font-bold text-sm">34 Reclame</span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-slate-200"></div>
+
+      <!-- Stat 2: Avg Active Longevity -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-[11px] font-medium">Longevitate Medie (Validare ROAS)</span>
+          <span id="kpiAvgLongevity" class="text-slate-800 font-bold text-sm">48.2 Zile active</span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-slate-200"></div>
+
+      <!-- Stat 3: Top Hook Archetype -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-[11px] font-medium">Unghi Psihologic Dominant</span>
+          <span id="kpiTopAngle" class="text-indigo-700 font-bold text-sm">Problem-Agitation (42%)</span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-slate-200"></div>
+
+      <!-- Stat 4: Dominant Platform -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-lg bg-pink-50 text-pink-600 flex items-center justify-center font-bold">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        <div>
+          <span class="text-slate-400 block text-[11px] font-medium">Canal Preferat de Scalare</span>
+          <span class="text-slate-800 font-bold text-sm">Instagram Reels (68%)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Filter Indicator & Reset -->
+    <div class="flex items-center space-x-2 pl-4">
+      <span id="activeFilterBadge" class="hidden px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold">
+        Filtru Activ: <span id="filterDesc">Reclame >45 zile</span>
+      </span>
+      <button onclick="resetFilters()" class="text-xs font-medium text-slate-500 hover:text-slate-800 underline cursor-pointer">Resetează filtrele</button>
+    </div>
+  </section>
+
+  <!-- NAVIGATION TABS (Monday.com Board Style) -->
+  <div class="bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+    <div class="flex space-x-8 text-xs">
+      <button onclick="switchTab('board')" id="tabBtnBoard" class="py-3 px-1 tab-active flex items-center space-x-2 transition cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span>📋 Monday Board (Tabel Inteligent)</span>
+      </button>
+
+      <button onclick="switchTab('matrix')" id="tabBtnMatrix" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>📊 Semrush Analytics & Head-to-Head</span>
+      </button>
+
+      <button onclick="switchTab('kanban')" id="tabBtnKanban" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+        <span>🗂️ Funnel Pipeline (Kanban)</span>
+      </button>
+
+      <button onclick="switchTab('generator')" id="tabBtnGenerator" class="py-3 px-1 text-slate-500 hover:text-slate-800 flex items-center space-x-2 transition cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span>🤖 AI Strategy Capsule (Export to Claude/GPT)</span>
+      </button>
+    </div>
+
+    <!-- View Mode Switch: Cards vs Compact Table -->
+    <div class="flex items-center space-x-1 py-2">
+      <button onclick="setViewLayout('grid')" id="btnLayoutGrid" class="p-1.5 rounded bg-slate-100 text-blue-600 hover:bg-slate-200 transition" title="Vizualizare Carduri Ad">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+      </button>
+      <button onclick="setViewLayout('table')" id="btnLayoutTable" class="p-1.5 rounded text-slate-400 hover:bg-slate-100 transition" title="Vizualizare Tabel Compact">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- AI NATURAL LANGUAGE SEARCH & FILTER BAR -->
+  <section class="bg-white/90 backdrop-blur-xs border-b border-slate-200 px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+    <!-- Natural Language AI Search Bar -->
+    <div class="flex-1 relative">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+      <input type="text" id="aiSearchInput" onkeydown="handleSearchKey(event)" placeholder="Căutare inteligentă AI: 'Reclame video active de peste 45 zile cu ofertă bundle' sau 'hook de curiozitate'..." class="w-full pl-10 pr-24 py-2 bg-slate-100/70 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition shadow-2xs">
+      <button onclick="executeAiSearch()" class="absolute right-1.5 top-1.5 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-semibold flex items-center space-x-1 transition shadow-xs">
+        <span>Caută AI</span>
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+    </div>
+
+    <!-- Quick Filter Pills -->
+    <div class="flex items-center space-x-2 overflow-x-auto text-xs shrink-0">
+      <span class="text-[11px] font-medium text-slate-400">Longevitate:</span>
+      <button onclick="setLongevityFilter('all')" id="fltAll" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 font-semibold cursor-pointer">Toate</button>
+      <button onclick="setLongevityFilter('scaling')" id="fltScaling" class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-semibold cursor-pointer">🔥 Scaling (&gt;45z)</button>
+      <button onclick="setLongevityFilter('steady')" id="fltSteady" class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-semibold cursor-pointer">⚡ Steady (20-45z)</button>
+      <button onclick="setLongevityFilter('testing')" id="fltTesting" class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 font-semibold cursor-pointer">🔬 Testare (&lt;20z)</button>
+
+      <span class="text-slate-300">|</span>
+
+      <span class="text-[11px] font-medium text-slate-400">Format:</span>
+      <select id="formatFilter" onchange="applyFilters()" class="px-2 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:outline-none">
+        <option value="all">Toate formatele</option>
+        <option value="video">9:16 Video / Reels</option>
+        <option value="carousel">Carusel Imagini</option>
+        <option value="image">Static Image</option>
+        <option value="ugc">UGC Lo-Fi Style</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 flex overflow-hidden relative">
+
+    <!-- PRIMARY CONTENT PANE (Scrollable) -->
+    <div class="flex-1 overflow-y-auto p-6" id="mainScrollArea">
+
+      <!-- ================= TAB 1: MONDAY BOARD (CARDS / TABLE) ================= -->
+      <div id="tabContentBoard" class="space-y-6">
+
+        <!-- Board Section Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Reclame Concurență Monitorizate</h2>
+            <p class="text-xs text-slate-500">Analizate conform principiului longevității active &amp; clustering de unghiuri</p>
+          </div>
+          <div class="flex items-center space-x-2 text-xs">
+            <span class="text-slate-500">Sortare:</span>
+            <select id="sortBy" onchange="applyFilters()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-2xs">
+              <option value="longevity-desc">Cele mai longevive (&gt;60z)</option>
+              <option value="longevity-asc">Cele mai noi (&lt;7z)</option>
+              <option value="brand">Competitor (A-Z)</option>
+              <option value="roas">Scor ROAS Estimat</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- GRID / CARD VIEW CONTAINER -->
+        <div id="adsGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- TABLE VIEW CONTAINER (Monday.com Style - Hidden by default) -->
+        <div id="adsTableContainer" class="hidden bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold">
+                <th class="py-3 px-4">Previzualizare</th>
+                <th class="py-3 px-4">Brand / Pagina</th>
+                <th class="py-3 px-4">Status &amp; Zile Active</th>
+                <th class="py-3 px-4">Hook Principal</th>
+                <th class="py-3 px-4">Unghi Psihologic</th>
+                <th class="py-3 px-4">Canale</th>
+                <th class="py-3 px-4">Ofertă &amp; CTA</th>
+                <th class="py-3 px-4 text-right">Acțiuni</th>
+              </tr>
+            </thead>
+            <tbody id="adsTableBody" class="divide-y divide-slate-200">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ================= TAB 2: SEMRUSH ANALYTICS & MATRIX ================= -->
+      <div id="tabContentMatrix" class="hidden space-y-6">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Semrush Competitor Intelligence Matrix</h2>
+          <p class="text-xs text-slate-500">Comparație directă head-to-head pe volum, longevitate, unghiuri și cuvinte-cheie psihologice</p>
+        </div>
+
+        <!-- Head-to-Head Comparison Table -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs p-5">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Competitor Benchmark Matrix</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 font-semibold">
+                  <th class="py-2.5 px-4">Competitor</th>
+                  <th class="py-2.5 px-4">Total Reclame Active</th>
+                  <th class="py-2.5 px-4">Longevitate Medie</th>
+                  <th class="py-2.5 px-4">Rata Reclame &gt;45z (Evergreen)</th>
+                  <th class="py-2.5 px-4">Mix Video Reels</th>
+                  <th class="py-2.5 px-4">Unghi Psihologic Principal</th>
+                  <th class="py-2.5 px-4">Nivel Agresivitate Ofertă</th>
+                </tr>
+              </thead>
+              <tbody id="matrixTableBody" class="divide-y divide-slate-100 font-medium">
+                <!-- Dynamically generated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Keyword & Hook Frequency Cloud -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">🔥 Top Cuvinte-Cheie Emoționale (Hook Copy)</h3>
+            <p class="text-xs text-slate-400 mb-4">Cuvinte cel mai des întâlnite în primele 2 rânduri ale reclamelor de succes</p>
+            <div id="keywordCloud" class="flex flex-wrap gap-2">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">🎯 Distribuția Unghiurilor Psihologice</h3>
+            <p class="text-xs text-slate-400 mb-4">Cum atacă concurența atenția utilizatorului pe etape de funnel</p>
+            <div class="space-y-3" id="angleDistributionBars">
+              <!-- Dynamically rendered progress bars -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Seasonality & Launch Velocity Chart Canvas -->
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Creative Launch Velocity &amp; Seasonality</h3>
+              <p class="text-xs text-slate-400">Când testează competitorii noi reclame (valuri de lansare pe ultimele 6 luni)</p>
+            </div>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold">Activitate Intensă: Septembrie - Noiembrie</span>
+          </div>
+          <div class="h-48 w-full relative flex items-end justify-between px-4 pb-2 border-b border-slate-200" id="velocityChartContainer">
+            <!-- Bars drawn via JS -->
+          </div>
+          <div class="flex justify-between text-[11px] text-slate-400 mt-2 px-4">
+            <span>Iunie</span>
+            <span>Iulie</span>
+            <span>August</span>
+            <span>Septembrie</span>
+            <span>Octombrie</span>
+            <span>Noiembrie (Curent)</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= TAB 3: FUNNEL PIPELINE (KANBAN) ================= -->
+      <div id="tabContentKanban" class="hidden overflow-x-auto pb-4">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Pipeline Pâlnie de Conversie (Kanban)</h2>
+            <p class="text-xs text-slate-500">Segmentarea reclamelor pe etape de conștientizare (Eugene Schwartz: Unaware ➔ Most Aware)</p>
+          </div>
+          <span class="text-xs text-slate-400">Glisează sau organizează reclamele pentru moodboard</span>
+        </div>
+
+        <div class="flex space-x-4 min-w-max">
+          <!-- Column 1: Top of Funnel (Atenție & Problemă) -->
+          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                <span class="text-xs font-bold text-slate-800">Top of Funnel (Problem/Story)</span>
+              </div>
+              <span id="kbCountTof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
+            </div>
+            <div id="kanbanTofList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 2: Middle of Funnel (Mecanism & Educație) -->
+          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                <span class="text-xs font-bold text-slate-800">Middle of Funnel (Mechanism/Demo)</span>
+              </div>
+              <span id="kbCountMof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
+            </div>
+            <div id="kanbanMofList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 3: Bottom of Funnel (Ofertă & Retargeting) -->
+          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="text-xs font-bold text-slate-800">Bottom of Funnel (Offer/Social Proof)</span>
+              </div>
+              <span id="kbCountBof" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
+            </div>
+            <div id="kanbanBofList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 4: Swipe File (Favorite Salvate pentru Noi) -->
+          <div class="kanban-col bg-slate-100/90 rounded-xl p-3 border border-slate-200/80 flex flex-col max-h-[75vh]">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="text-xs font-bold text-slate-800">⭐ Swipe File (Salvate pentru Reclamele Noastre)</span>
+              </div>
+              <span id="kbCountSwipe" class="text-xs px-2 py-0.5 rounded-full bg-white font-semibold text-slate-600 border border-slate-200">0</span>
+            </div>
+            <div id="kanbanSwipeList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 4: AI STRATEGY CAPSULE GENERATOR ================= -->
+      <div id="tabContentGenerator" class="hidden space-y-6 max-w-5xl mx-auto">
+        <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md">
+          <div class="flex items-start justify-between">
+            <div class="space-y-2">
+              <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/30 text-blue-200 text-[11px] font-semibold border border-blue-400/30">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Sursă date: Meta Ads Library API Archive</span>
+              </div>
+              <h2 class="text-xl font-bold">Generator Prompt &amp; Capsulă Strategică pentru AI</h2>
+              <p class="text-xs text-blue-200 max-w-2xl">
+                Transformă automat cele mai longevive reclame ale concurenților în structuri clare, unghiuri de atac și storyboard-uri pe care le poți introduce direct în <b>ChatGPT, Claude 3.5 Sonnet, Midjourney sau Runway</b> pentru a crea reclame de 10x mai bune.
+              </p>
+            </div>
+            <button onclick="generateCustomStrategyPrompt()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm flex items-center space-x-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Regenerează din Reclamele Active</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Strategy Options Selector -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="selectStrategyFormat('copywriter')" id="btnStratCopy" class="p-4 bg-white border-2 border-blue-600 rounded-xl text-left shadow-2xs transition">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Formatul 1</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800">Master Copywriting Prompt</h4>
+            <p class="text-xs text-slate-500 mt-1">Pentru ChatGPT / Claude: Generează 5 unghiuri de text bazate pe hook-urile cu longevitate &gt;60z.</p>
+          </button>
+
+          <button onclick="selectStrategyFormat('ugc')" id="btnStratUgc" class="p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl text-left shadow-2xs transition">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Formatul 2</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-slate-300"></span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800">Storyboard Video UGC (0-60s)</h4>
+            <p class="text-xs text-slate-500 mt-1">Script secvență cu secvență (Hook 0-3s, Agitare, Mecanism, Dovadă, Ofertă) pentru creatori.</p>
+          </button>
+
+          <button onclick="selectStrategyFormat('json')" id="btnStratJson" class="p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl text-left shadow-2xs transition">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Formatul 3</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-transparent border border-slate-300"></span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800">Capsulă Date Structurate (JSON)</h4>
+            <p class="text-xs text-slate-500 mt-1">Export API compatibil cu vector databases, agenți autonomi și pipeline-uri n8n / Make.</p>
+          </button>
+        </div>
+
+        <!-- Strategy Prompt Display Box -->
+        <div class="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+          <div class="bg-slate-100/80 px-5 py-3 border-b border-slate-200 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 flex items-center space-x-2">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span id="promptTitle">Prompt Formatat pentru ChatGPT / Claude 3.5 Sonnet</span>
+            </span>
+            <div class="flex items-center space-x-2">
+              <button onclick="copyStrategyPrompt()" id="copyPromptBtn" class="px-3 py-1 bg-white border border-slate-200 hover:border-blue-400 rounded-lg text-xs font-semibold text-slate-700 shadow-2xs flex items-center space-x-1.5 transition">
+                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                <span id="copyPromptText">Copiază Promptul</span>
+              </button>
+              <button onclick="downloadPromptFile()" class="px-3 py-1 bg-white border border-slate-200 hover:border-blue-400 rounded-lg text-xs font-semibold text-slate-700 shadow-2xs flex items-center space-x-1.5 transition">
+                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Descarcă Fișier</span>
+              </button>
+            </div>
+          </div>
+          <div class="p-5">
+            <textarea id="strategyPromptOutput" readonly class="w-full h-96 font-mono text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg p-4 leading-relaxed resize-none focus:outline-none"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= RIGHT COLLAPSIBLE PANEL: AI SPY COPILOT CHAT ================= -->
+    <aside id="copilotPanel" class="w-96 bg-white border-l border-slate-200 flex flex-col shrink-0 shadow-lg z-20 transition-all duration-300">
+      <!-- Copilot Header -->
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold text-slate-900">AI Spy Analyst &amp; Copilot</h3>
+            <p class="text-[11px] text-slate-500">Conectat la datele reclamelor curente</p>
+          </div>
+        </div>
+        <button onclick="toggleCopilot()" class="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Action Chips for User -->
+      <div class="p-3 border-b border-slate-200 bg-white">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Sugestii Rapide de Întrebări:</span>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="askCopilot('Care sunt cele mai vechi 3 reclame și de ce funcționează?')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+            🏆 Top 3 reclame longevive
+          </button>
+          <button onclick="askCopilot('Analizează oferta principală a competitorilor')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+            💰 Oferta concurenței
+          </button>
+          <button onclick="askCopilot('Extrage unghiurile pentru a crea promptul de ChatGPT')" class="text-[11px] bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 px-2.5 py-1 rounded-full transition text-left">
+            📝 Extrage unghiurile pentru AI
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Scroll Container -->
+      <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs bg-slate-50/50">
+        <!-- Initial Assistant Message -->
+        <div class="flex items-start space-x-2.5">
+          <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">AI</div>
+          <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-2xs text-slate-800 leading-relaxed space-y-2">
+            <p>Salut! Sunt <b>AI Spy Analyst</b>. Am scanat baza de reclame a concurenței tale din Meta Ads Library.</p>
+            <p>Îți pot arăta instant care reclame generează profit pe termen lung, care sunt hook-urile cu cea mai mare rată de conversie și ce strategii de ofertă folosesc.</p>
+            <p class="text-slate-500 text-[11px]">Întreabă-mă orice despre concurență sau folosește sugestiile de mai sus!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 bg-white">
+        <form onsubmit="handleChatSubmit(event)" class="relative flex items-center">
+          <input type="text" id="chatInput" placeholder="Ex: 'Arată-mi doar reclamele de la Gymshark'..." class="w-full pl-3 pr-10 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white">
+          <button type="submit" class="absolute right-1.5 p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </form>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- ================= MODAL: META ADS API SETTINGS & CONNECT ================= -->
+  <div id="apiModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Configurare Meta Ads Library API</h3>
+            <p class="text-xs text-slate-500">Conectează token-ul oficial Graph API sau folosește Mock Engine</p>
+          </div>
+        </div>
+        <button onclick="closeApiModal()" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Mod de Lucru:</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="setApiMode('mock')" id="btnModeMock" class="p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 text-blue-700 font-bold text-left transition">
+              <span>🚀 Smart Mock / Demo Data</span>
+              <p class="font-normal text-[11px] text-slate-500 mt-0.5">Dataset verificat cu reclame reale &amp; metrici calculate</p>
+            </button>
+            <button type="button" onclick="setApiMode('live')" id="btnModeLive" class="p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-left transition">
+              <span>🔌 Live Meta Graph API</span>
+              <p class="font-normal text-[11px] text-slate-500 mt-0.5">Interogare directă pe https://graph.facebook.com</p>
+            </button>
+          </div>
+        </div>
+
+        <div id="liveApiInputs" class="space-y-3 opacity-50 pointer-events-none">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Meta Graph Access Token (User / App Token):</label>
+            <input type="password" id="inputAccessToken" placeholder="EAAB..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <p class="text-[10px] text-slate-400 mt-1">Obține un token gratuit din <a href="https://developers.facebook.com/tools/explorer/" target="_blank" class="text-blue-600 underline">Meta Graph API Explorer</a>.</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Țară Țintă (ISO):</label>
+              <select id="inputTargetCountry" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold">
+                <option value="RO" selected>România (RO)</option>
+                <option value="US">Statele Unite (US)</option>
+                <option value="GB">Marea Britanie (GB)</option>
+                <option value="DE">Germania (DE)</option>
+                <option value="ALL">Global / Toate</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Tip Reclame:</label>
+              <select id="inputAdType" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold">
+                <option value="ALL" selected>ALL (Toate reclamele comerciale)</option>
+                <option value="POLITICAL_AND_ISSUE_ADS">Politice / Sociale (cu date Spend)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-blue-800 text-[11px] leading-relaxed">
+          <p class="font-semibold mb-0.5">💡 Cum funcționează Reverse-Engineering-ul:</p>
+          Meta Ads Library API returnează textele, previzualizările și datele de start. Aplicația noastră calculează automat <b>zilele active continue</b>, identifică clusterele de iterație și clasifică psihologic hook-ul (Problemă, Curiozitate, Ofertă, Dovadă).
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-200">
+        <button onclick="closeApiModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800">Închide</button>
+        <button onclick="saveApiSettings()" class="px-4 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-xs transition">Salvează &amp; Sincronizează</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: AD INSPECTOR DEEP-DIVE ================= -->
+  <div id="adModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-2xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div id="modalBrandAvatar" class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs uppercase">B</div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 id="modalBrandName" class="text-sm font-bold text-slate-900">Brand Name</h3>
+              <span id="modalActiveStatus" class="monday-badge px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 font-bold">Scaling (78z)</span>
+            </div>
+            <p id="modalAdId" class="text-[11px] text-slate-400 font-mono">Meta Ad ID: 894192841</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="addCurrentAdToSwipe()" class="px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold flex items-center space-x-1 transition">
+            <span>⭐ Salvează în Swipe File</span>
+          </button>
+          <button onclick="closeAdModal()" class="text-slate-400 hover:text-slate-600 p-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left: Media Preview -->
+          <div class="space-y-3">
+            <div class="bg-slate-900 rounded-xl overflow-hidden aspect-[9/14] md:aspect-[4/5] relative flex items-center justify-center border border-slate-200 shadow-inner group">
+              <img id="modalAdImage" src="" alt="Ad Creative Preview" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+                <span id="modalOverlayFormat" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-600/80 w-max mb-1">9:16 Video Reels</span>
+                <p id="modalOverlayHook" class="font-bold text-sm leading-tight text-white/95">"Nu mai cumpăra..."</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-slate-500 text-[11px]">
+              <span id="modalPlatformsText">Canale: Instagram Reels, Stories, Facebook</span>
+              <a id="modalMetaLibraryLink" href="#" target="_blank" class="text-blue-600 hover:underline flex items-center space-x-1">
+                <span>Vezi în Meta Ads Library</span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Deep Copy & Psychological Architecture -->
+          <div class="space-y-4">
+            <!-- Hook Analysis Pill -->
+            <div class="p-3 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700">🎯 Anatomia Hook-ului (0-3 Secunde)</span>
+                <span id="modalHookArchetype" class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-200 text-indigo-800">Problem-Agitation</span>
+              </div>
+              <p id="modalHookExplanation" class="text-indigo-900 font-medium">Capturează atenția prin negarea soluțiilor tradiționale și crearea de curiozitate științifică.</p>
+            </div>
+
+            <!-- Full Ad Copy with Segment Highlighting -->
+            <div>
+              <span class="text-[11px] font-bold text-slate-600 block mb-1">Textul Reclamei (Primary Text):</span>
+              <div id="modalAdCopy" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl font-sans text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-48 overflow-y-auto">
+                <!-- Injected text -->
+              </div>
+            </div>
+
+            <!-- Headline & Call to Action -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Titlu (Headline)</span>
+                <p id="modalHeadline" class="font-bold text-slate-800 text-xs mt-1">Garanție 60 Zile Fără Risc</p>
+              </div>
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Buton Call To Action</span>
+                <p id="modalCta" class="font-bold text-blue-600 text-xs mt-1">Comandă Acum (Shop Now)</p>
+              </div>
+            </div>
+
+            <!-- Offer & Risk Reversal -->
+            <div class="p-3.5 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">💰 Structura Ofertei &amp; Risc Zero (Risk Reversal)</span>
+              <p id="modalOfferDetails" class="text-emerald-950 font-medium text-xs">Bundle 2+1 Gratuit + Transport 24h + Garanție de returnare fără întrebări.</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="pt-2 flex items-center space-x-2">
+              <button onclick="stealHookToAi()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-xs transition flex items-center justify-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Generează Prompt AI pe această reclamă</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    /* =========================================================================
+       1. DATASET: REALISTIC COMPETITOR ADS WITH DEEP METRICS & INTELLIGENCE
+       ========================================================================= */
+    const mockAdsDatabase = [
+      {
+        id: "ad_gymshark_01",
+        brand: "Gymshark",
+        niche: "fitness",
+        avatar: "GS",
+        avatarBg: "bg-slate-900",
+        activeDays: 84,
+        status: "scaling", // scaling (>45d), steady (20-45d), testing (<20d)
+        funnelStage: "tof",
+        format: "video",
+        formatLabel: "9:16 UGC Video (iPhone)",
+        platforms: ["Instagram Reels", "Stories", "Facebook"],
+        thumbnail: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80",
+        hookType: "Problem-Agitation",
+        headline: "De ce colanții tăi obișnuiți se rup la genuflexiuni?",
+        primaryText: "Majoritatea colanților devin transparenți la prima genuflexiune adâncă. Am testat peste 40 de țesături până am creat tehnologia Seamless Flex.\n\nFără cusături care irită. Opacitate 100% testată în sală. Peste 250.000 de sportivi îi poartă zilnic.",
+        cta: "Cumpără Acum (Shop Now)",
+        offer: "20% Reducere la prima comandă + Retur gratuit 30 de zile",
+        roasScore: 9.4,
+        variationsCount: 14,
+        keyTags: ["rezistență", "fără cusături", "squat-proof", "reducere 20%"]
+      },
+      {
+        id: "ad_myprotein_02",
+        brand: "MyProtein",
+        niche: "fitness",
+        avatar: "MP",
+        avatarBg: "bg-blue-600",
+        activeDays: 62,
+        status: "scaling",
+        funnelStage: "bof",
+        format: "ugc",
+        formatLabel: "UGC Taste Test Lo-Fi",
+        platforms: ["Instagram Reels", "TikTok/Meta"],
+        thumbnail: "https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=600&auto=format&fit=crop&q=80",
+        hookType: "Irresistible Offer",
+        headline: "Plătești 1, Primești 2 la Toate Proteinele Izolate",
+        primaryText: "Nu mai plăti prețuri triple pe proteine cu gust de cretă. Izolat proteic cu 90% concentrație și arome premiate.\n\nAdaugă două pungi în coș și una este complet din partea noastră. Oferta expiră duminică la miezul nopții!",
+        cta: "Revendică Oferta (Claim Offer)",
+        offer: "1+1 Gratuit + Shaker Cadou la comenzi de peste 150 lei",
+        roasScore: 8.9,
+        variationsCount: 9,
+        keyTags: ["1+1 gratuit", "ofertă limitată", "gust delicios", "izolat"]
+      },
+      {
+        id: "ad_monday_03",
+        brand: "Monday.com",
+        niche: "saas",
+        avatar: "MO",
+        avatarBg: "bg-red-500",
+        activeDays: 95,
+        status: "scaling",
+        funnelStage: "tof",
+        format: "video",
+        formatLabel: "Motion UI Screen Recording",
+        platforms: ["Facebook Feed", "Instagram Feed", "Messenger"],
+        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80",
+        hookType: "Chaos vs Order (Contrarian)",
+        headline: "Oprește haosul din Excel și 35 de tab-uri deschise",
+        primaryText: "Dacă echipa ta încă folosește foi de calcul statice și emailuri interminabile pentru a urmări proiectele, pierdeți 12 ore pe săptămână.\n\nVezi proiectele într-o singură privire: statusuri colorate, automatizări automate și termene limită clare. Fără instalare complicată.",
+        cta: "Începe Gratuit (Try Free)",
+        offer: "Trial Gratuit 14 Zile (Fără Card Necesar)",
+        roasScore: 9.7,
+        variationsCount: 22,
+        keyTags: ["adio excel", "productivitate", "fără haos", "automatizare"]
+      },
+      {
+        id: "ad_semrush_04",
+        brand: "Semrush",
+        niche: "saas",
+        avatar: "SR",
+        avatarBg: "bg-orange-600",
+        activeDays: 54,
+        status: "scaling",
+        funnelStage: "mof",
+        format: "carousel",
+        formatLabel: "Carusel 5 Slide-uri Analitice",
+        platforms: ["Facebook Feed", "Instagram Carousel"],
+        thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80",
+        hookType: "Competitor Secret / Curiosity",
+        headline: "Cum să afli exact pe ce cuvinte cheie plătește concurența ta",
+        primaryText: "Nu ghici unde să-ți aloci bugetul de marketing. Introdu domeniul competitorului tău și vezi instant:\n1. Reclamele lor cele mai profitabile\n2. Cuvintele cheie care le aduc 80% din trafic\n3. Backlink-urile pe care le poți obține și tu.\n\nTestează unealta gratuit timp de 7 zile.",
+        cta: "Explorează Datele (Learn More)",
+        offer: "7 Zile Acces Pro Gratuit",
+        roasScore: 8.7,
+        variationsCount: 8,
+        keyTags: ["spionează concurența", "cuvinte cheie", "roi garantat"]
+      },
+      {
+        id: "ad_curology_05",
+        brand: "Curology / Skincare",
+        niche: "beauty",
+        avatar: "CU",
+        avatarBg: "bg-purple-600",
+        activeDays: 110,
+        status: "scaling",
+        funnelStage: "tof",
+        format: "video",
+        formatLabel: "9:16 Before / After Dermatolog",
+        platforms: ["Instagram Reels", "Stories", "Facebook"],
+        thumbnail: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80",
+        hookType: "Before & After / Authority",
+        headline: "Rutina prescrisă de dermatolog personalizat pentru acneea ta",
+        primaryText: "Cremele din supermarket sunt făcute pentru 'oricine' — adică pentru nimeni în mod specific.\n\nFă un chestionar de 3 minute, trimite o poză unui medic dermatolog autorizat și primești acasă formula ta personalizată în flacon cu numele tău. Prima lună este gratuită, plătești doar transportul.",
+        cta: "Fă Chestionarul (Start Quiz)",
+        offer: "Prima Lună Gratuită (Plătești doar 4.95$ transportul)",
+        roasScore: 9.8,
+        variationsCount: 19,
+        keyTags: ["personalizat", "dermatolog", "prima lună gratuită", "rezultate 30z"]
+      },
+      {
+        id: "ad_peakdesign_06",
+        brand: "Peak Design",
+        niche: "ecommerce",
+        avatar: "PD",
+        avatarBg: "bg-zinc-800",
+        activeDays: 38,
+        status: "steady",
+        funnelStage: "mof",
+        format: "video",
+        formatLabel: "Slow-Mo Product Breakdown",
+        platforms: ["Instagram Reels", "Facebook Feed"],
+        thumbnail: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop&q=80",
+        hookType: "Feature Demonstration",
+        headline: "Rucsacul conceput pentru următorii 20 de ani",
+        primaryText: "Fermoare impermeabile UltraZips rezistente la peste 50.000 de cicluri de deschidere. Material reciclat 100% rezistent la abraziune și intemperii.\n\nConstruit pentru fotografi, călători și profesioniști care urăsc rucsacurile de unică folosință.",
+        cta: "Vezi Detaliile (Shop Now)",
+        offer: "Garanție Pe Viață Fără Condiții + Retur 60 de zile",
+        roasScore: 8.2,
+        variationsCount: 5,
+        keyTags: ["garanție pe viață", "impermeabil", "ergonomic", "rezistență"]
+      },
+      {
+        id: "ad_alphawear_07",
+        brand: "AlphaWear Fitness",
+        niche: "fitness",
+        avatar: "AW",
+        avatarBg: "bg-emerald-700",
+        activeDays: 14,
+        status: "testing",
+        funnelStage: "tof",
+        format: "image",
+        formatLabel: "High-Contrast Flatlay",
+        platforms: ["Facebook Feed", "Instagram Feed"],
+        thumbnail: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&auto=format&fit=crop&q=80",
+        hookType: "Contrarian / Status",
+        headline: "Tricouri pentru bărbați croite pe fizic atletic",
+        primaryText: "Tricourile standard sunt prea largi în talie și prea strâmte la umeri. Croiala noastră conică accentuează forma în V fără să strângă.\n\nMaterial respirabil din bumbac organic și spandex.",
+        cta: "Descoperă Colecția",
+        offer: "Pachet 3 Tricouri cu 30% Reducere",
+        roasScore: 7.1,
+        variationsCount: 3,
+        keyTags: ["croială atletică", "bumbac premium", "pachet 3"]
+      },
+      {
+        id: "ad_notion_08",
+        brand: "Notion",
+        niche: "saas",
+        avatar: "NO",
+        avatarBg: "bg-slate-950",
+        activeDays: 73,
+        status: "scaling",
+        funnelStage: "tof",
+        format: "ugc",
+        formatLabel: "Creator Desk Setup",
+        platforms: ["Instagram Reels", "Stories"],
+        thumbnail: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=80",
+        hookType: "Second Brain (Aspiration)",
+        headline: "Cum arată al doilea meu creier digital",
+        primaryText: "Notițe, baze de date, proiecte de echipă și generare AI — toate într-un singur spațiu conectat.\n\nPeste 35 de milioane de oameni și-au construit propriul sistem de lucru în Notion.",
+        cta: "Descarcă Gratuit",
+        offer: "Cont Gratuit pe Viață pentru Utilizare Personală",
+        roasScore: 9.3,
+        variationsCount: 11,
+        keyTags: ["second brain", "gratuit", "ai integrat", "fără limite"]
+      }
+    ];
+
+    /* App State */
+    let currentAds = [...mockAdsDatabase];
+    let selectedAd = null;
+    let savedSwipeAds = [];
+    let currentNiche = "fitness";
+    let currentLongevityFilter = "all";
+    let currentFormatFilter = "all";
+    let currentSort = "longevity-desc";
+    let currentViewLayout = "grid"; // "grid" or "table"
+    let apiMode = "mock"; // "mock" or "live"
+    let currentStrategyType = "copywriter";
+
+    /* =========================================================================
+       2. INITIALIZATION & RENDERING
+       ========================================================================= */
+    document.addEventListener("DOMContentLoaded", () => {
+      applyFilters();
+      renderSemrushMatrix();
+      renderVelocityChart();
+      generateCustomStrategyPrompt();
+    });
+
+    /* Tab Switching */
+    function switchTab(tabId) {
+      const tabs = ["board", "matrix", "kanban", "generator"];
+      tabs.forEach(t => {
+        const content = document.getElementById("tabContent" + t.charAt(0).toUpperCase() + t.slice(1));
+        const btn = document.getElementById("tabBtn" + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === tabId) {
+          content.classList.remove("hidden");
+          btn.classList.add("tab-active");
+          btn.classList.remove("text-slate-500");
+        } else {
+          content.classList.add("hidden");
+          btn.classList.remove("tab-active");
+          btn.classList.add("text-slate-500");
+        }
+      });
+
+      if (tabId === "kanban") {
+        renderKanban();
+      } else if (tabId === "matrix") {
+        renderSemrushMatrix();
+      }
+    }
+
+    /* Filter & Search System */
+    function applyFilters() {
+      const niche = document.getElementById("nicheSelect").value;
+      const longevity = currentLongevityFilter;
+      const format = document.getElementById("formatFilter").value;
+      const sortBy = document.getElementById("sortBy").value;
+
+      let filtered = mockAdsDatabase.filter(ad => {
+        // Niche filter
+        if (niche !== "all" && ad.niche !== niche) return false;
+        // Longevity filter
+        if (longevity === "scaling" && ad.activeDays < 45) return false;
+        if (longevity === "steady" && (ad.activeDays < 20 || ad.activeDays >= 45)) return false;
+        if (longevity === "testing" && ad.activeDays >= 20) return false;
+        // Format filter
+        if (format !== "all") {
+          if (format === "video" && ad.format !== "video") return false;
+          if (format === "carousel" && ad.format !== "carousel") return false;
+          if (format === "image" && ad.format !== "image") return false;
+          if (format === "ugc" && ad.format !== "ugc") return false;
+        }
+        return true;
+      });
+
+      // Sorting
+      if (sortBy === "longevity-desc") {
+        filtered.sort((a, b) => b.activeDays - a.activeDays);
+      } else if (sortBy === "longevity-asc") {
+        filtered.sort((a, b) => a.activeDays - b.activeDays);
+      } else if (sortBy === "brand") {
+        filtered.sort((a, b) => a.brand.localeCompare(b.brand));
+      } else if (sortBy === "roas") {
+        filtered.sort((a, b) => b.roasScore - a.roasScore);
+      }
+
+      currentAds = filtered;
+      renderGrid();
+      renderTable();
+      updateKpis(filtered);
+    }
+
+    function setLongevityFilter(type) {
+      currentLongevityFilter = type;
+      const btns = {
+        all: document.getElementById("fltAll"),
+        scaling: document.getElementById("fltScaling"),
+        steady: document.getElementById("fltSteady"),
+        testing: document.getElementById("fltTesting")
+      };
+
+      Object.keys(btns).forEach(key => {
+        btns[key].className = "px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer " + 
+          (key === type ? "bg-blue-600 text-white shadow-xs" : "bg-slate-100 text-slate-700 hover:bg-slate-200");
+      });
+
+      const badge = document.getElementById("activeFilterBadge");
+      const desc = document.getElementById("filterDesc");
+      if (type === "all") {
+        badge.classList.add("hidden");
+      } else {
+        badge.classList.remove("hidden");
+        desc.innerText = type === "scaling" ? "Scaling (>45z)" : type === "steady" ? "Steady (20-45z)" : "Testare (<20z)";
+      }
+
+      applyFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById("nicheSelect").value = "all";
+      document.getElementById("formatFilter").value = "all";
+      document.getElementById("aiSearchInput").value = "";
+      setLongevityFilter("all");
+    }
+
+    function changeNiche(val) {
+      applyFilters();
+      renderSemrushMatrix();
+    }
+
+    /* Update Top Semrush KPIs */
+    function updateKpis(ads) {
+      document.getElementById("kpiTotalAds").innerText = `${ads.length} Reclame`;
+      if (ads.length > 0) {
+        const avg = Math.round(ads.reduce((acc, a) => acc + a.activeDays, 0) / ads.length);
+        document.getElementById("kpiAvgLongevity").innerText = `${avg} Zile active`;
+      } else {
+        document.getElementById("kpiAvgLongevity").innerText = `0 Zile`;
+      }
+    }
+
+    /* Render Ad Cards (Monday style with longevity badge) */
+    function renderGrid() {
+      const container = document.getElementById("adsGridContainer");
+      if (currentAds.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center bg-white rounded-2xl border border-slate-200 p-8">
+            <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <h4 class="text-sm font-bold text-slate-700">Nicio reclamă găsită pentru aceste filtre</h4>
+            <p class="text-xs text-slate-400 mt-1">Încearcă să resetezi filtrele sau să cauți alt termen.</p>
+            <button onclick="resetFilters()" class="mt-4 px-3.5 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-xs">Resetează Filtrele</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = currentAds.map(ad => {
+        // Status pill badge color
+        let statusBadge = "";
+        if (ad.activeDays >= 45) {
+          statusBadge = `<span class="monday-badge px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300">🔥 Scaling (${ad.activeDays}z)</span>`;
+        } else if (ad.activeDays >= 20) {
+          statusBadge = `<span class="monday-badge px-2 py-0.5 text-[10px] bg-indigo-100 text-indigo-800 border border-indigo-300">⚡ Steady (${ad.activeDays}z)</span>`;
+        } else {
+          statusBadge = `<span class="monday-badge px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 border border-amber-300">🔬 Testing (${ad.activeDays}z)</span>`;
+        }
+
+        return `
+          <div class="ad-card-hover bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between cursor-pointer" onclick="openAdModal('${ad.id}')">
+            <!-- Thumbnail & Top Tags -->
+            <div class="relative aspect-[4/3] bg-slate-900 overflow-hidden">
+              <img src="${ad.thumbnail}" alt="${ad.brand} Ad" class="w-full h-full object-cover transition duration-300 hover:scale-105" loading="lazy">
+              
+              <div class="absolute top-2.5 left-2.5 flex items-center space-x-1.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white">
+                  ${ad.formatLabel.split(' ')[0]}
+                </span>
+              </div>
+
+              <div class="absolute top-2.5 right-2.5">
+                ${statusBadge}
+              </div>
+
+              <!-- Variations count pill (signal of creative iteration) -->
+              <div class="absolute bottom-2.5 left-2.5">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-600/90 text-white backdrop-blur-xs shadow-xs">
+                  ${ad.variationsCount} iterații active
+                </span>
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex items-center justify-between text-xs mb-1.5">
+                  <span class="font-bold text-slate-900">${ad.brand}</span>
+                  <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.2 rounded-md">${ad.hookType}</span>
+                </div>
+                <h3 class="font-bold text-xs text-slate-800 line-clamp-2 leading-snug">
+                  "${ad.headline}"
+                </h3>
+                <p class="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                  ${ad.primaryText}
+                </p>
+              </div>
+
+              <!-- Offer & Meta Actions -->
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <div class="truncate pr-2">
+                  <span class="text-slate-400 block text-[10px]">Ofertă:</span>
+                  <span class="font-semibold text-emerald-700 truncate block">${ad.offer.split('+')[0]}</span>
+                </div>
+                <button onclick="event.stopPropagation(); openAdModal('${ad.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-blue-600 hover:text-white rounded-md text-slate-700 font-semibold transition shrink-0">
+                  Inspectează
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* Render Compact Monday Table View */
+    function renderTable() {
+      const tbody = document.getElementById("adsTableBody");
+      tbody.innerHTML = currentAds.map(ad => {
+        let statusBadge = ad.activeDays >= 45 
+          ? `<span class="monday-badge px-2 py-0.5 text-[11px] bg-emerald-100 text-emerald-800">${ad.activeDays} zile (Scaling)</span>`
+          : ad.activeDays >= 20
+          ? `<span class="monday-badge px-2 py-0.5 text-[11px] bg-indigo-100 text-indigo-800">${ad.activeDays} zile (Steady)</span>`
+          : `<span class="monday-badge px-2 py-0.5 text-[11px] bg-amber-100 text-amber-800">${ad.activeDays} zile (Testare)</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition cursor-pointer" onclick="openAdModal('${ad.id}')">
+            <td class="py-2.5 px-4">
+              <img src="${ad.thumbnail}" class="w-10 h-10 rounded-lg object-cover border border-slate-200">
+            </td>
+            <td class="py-2.5 px-4 font-bold text-slate-900">${ad.brand}</td>
+            <td class="py-2.5 px-4">${statusBadge}</td>
+            <td class="py-2.5 px-4 max-w-xs truncate font-medium text-slate-800">"${ad.headline}"</td>
+            <td class="py-2.5 px-4">
+              <span class="px-2 py-0.5 bg-slate-100 rounded text-slate-700 text-[11px] font-semibold">${ad.hookType}</span>
+            </td>
+            <td class="py-2.5 px-4 text-slate-500 text-[11px]">${ad.platforms[0]}</td>
+            <td class="py-2.5 px-4 text-emerald-700 font-medium truncate max-w-xs">${ad.cta}</td>
+            <td class="py-2.5 px-4 text-right">
+              <button onclick="event.stopPropagation(); openAdModal('${ad.id}')" class="text-blue-600 hover:text-blue-800 font-bold">Detalii &rarr;</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setViewLayout(mode) {
+      currentViewLayout = mode;
+      const grid = document.getElementById("adsGridContainer");
+      const table = document.getElementById("adsTableContainer");
+      const btnGrid = document.getElementById("btnLayoutGrid");
+      const btnTable = document.getElementById("btnLayoutTable");
+
+      if (mode === "grid") {
+        grid.classList.remove("hidden");
+        table.classList.add("hidden");
+        btnGrid.className = "p-1.5 rounded bg-slate-100 text-blue-600";
+        btnTable.className = "p-1.5 rounded text-slate-400 hover:bg-slate-100";
+      } else {
+        grid.classList.add("hidden");
+        table.classList.remove("hidden");
+        btnTable.className = "p-1.5 rounded bg-slate-100 text-blue-600";
+        btnGrid.className = "p-1.5 rounded text-slate-400 hover:bg-slate-100";
+      }
+    }
+
+    /* =========================================================================
+       3. SEMRUSH COMPETITOR BENCHMARK MATRIX & KEYWORDS
+       ========================================================================= */
+    function renderSemrushMatrix() {
+      // Group ads by brand
+      const brands = {};
+      mockAdsDatabase.forEach(ad => {
+        if (!brands[ad.brand]) {
+          brands[ad.brand] = { name: ad.brand, ads: [], totalDays: 0, scalingCount: 0, videoCount: 0 };
+        }
+        brands[ad.brand].ads.push(ad);
+        brands[ad.brand].totalDays += ad.activeDays;
+        if (ad.activeDays >= 45) brands[ad.brand].scalingCount++;
+        if (ad.format === "video" || ad.format === "ugc") brands[ad.brand].videoCount++;
+      });
+
+      const matrixTbody = document.getElementById("matrixTableBody");
+      matrixTbody.innerHTML = Object.values(brands).map(b => {
+        const avgDays = Math.round(b.totalDays / b.ads.length);
+        const evergreenRatio = Math.round((b.scalingCount / b.ads.length) * 100);
+        const videoRatio = Math.round((b.videoCount / b.ads.length) * 100);
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 font-bold text-slate-900">${b.name}</td>
+            <td class="py-3 px-4">${b.ads.length} Reclame</td>
+            <td class="py-3 px-4"><span class="font-bold text-slate-800">${avgDays} zile</span></td>
+            <td class="py-3 px-4">
+              <div class="flex items-center space-x-2">
+                <div class="w-16 bg-slate-200 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full" style="width: ${evergreenRatio}%"></div>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-700">${evergreenRatio}%</span>
+              </div>
+            </td>
+            <td class="py-3 px-4 text-blue-600 font-semibold">${videoRatio}% Reels/UGC</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 font-bold">${b.ads[0].hookType}</span></td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-semibold">Risc Zero / Garanție</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Keywords cloud
+      const keywords = [
+        { word: "fără cusături", count: 24, type: "benefit" },
+        { word: "garanție 60 zile", count: 19, type: "offer" },
+        { word: "nu mai arunca banii", count: 17, type: "fear" },
+        { word: "1+1 gratuit", count: 15, type: "offer" },
+        { word: "secretul dermatologilor", count: 14, type: "curiosity" },
+        { word: "adio excel", count: 12, type: "pain" },
+        { word: "testat clinic", count: 11, type: "authority" },
+        { word: "doar astăzi", count: 9, type: "urgency" },
+        { word: "rezultate garantate", count: 8, type: "proof" }
+      ];
+
+      const cloud = document.getElementById("keywordCloud");
+      cloud.innerHTML = keywords.map(k => {
+        let colorClass = "bg-slate-100 text-slate-700";
+        if (k.type === "offer") colorClass = "bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold";
+        if (k.type === "fear" || k.type === "pain") colorClass = "bg-rose-50 text-rose-700 border border-rose-200 font-bold";
+        if (k.type === "curiosity") colorClass = "bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold";
+
+        return `
+          <button onclick="searchWord('${k.word}')" class="px-3 py-1 rounded-full text-xs font-medium ${colorClass} hover:opacity-80 transition cursor-pointer flex items-center space-x-1.5">
+            <span>#${k.word}</span>
+            <span class="text-[10px] opacity-60">(${k.count})</span>
+          </button>
+        `;
+      }).join('');
+
+      // Angle distribution progress bars
+      const angleBars = document.getElementById("angleDistributionBars");
+      const angles = [
+        { name: "Problem-Agitation (Frică & Greșeli)", pct: 42, color: "bg-indigo-600" },
+        { name: "Irresistible Offer & Risk Reversal", pct: 28, color: "bg-emerald-600" },
+        { name: "Curiosity & Behind The Scenes", pct: 18, color: "bg-blue-600" },
+        { name: "Social Proof / Before & After", pct: 12, color: "bg-amber-600" }
+      ];
+      angleBars.innerHTML = angles.map(a => `
+        <div>
+          <div class="flex justify-between text-[11px] mb-1 font-semibold">
+            <span class="text-slate-700">${a.name}</span>
+            <span class="text-slate-500">${a.pct}%</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+            <div class="${a.color} h-full" style="width: ${a.pct}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function searchWord(w) {
+      document.getElementById("aiSearchInput").value = w;
+      executeAiSearch();
+    }
+
+    function renderVelocityChart() {
+      const container = document.getElementById("velocityChartContainer");
+      const months = [
+        { label: "Iun", height: 35, ads: 12 },
+        { label: "Iul", height: 48, ads: 18 },
+        { label: "Aug", height: 42, ads: 15 },
+        { label: "Sep", height: 75, ads: 29 },
+        { label: "Oct", height: 92, ads: 38 },
+        { label: "Noi", height: 100, ads: 45 }
+      ];
+
+      container.innerHTML = months.map(m => `
+        <div class="flex-1 flex flex-col items-center justify-end h-full px-2 group">
+          <span class="text-[10px] font-bold text-slate-500 mb-1 opacity-0 group-hover:opacity-100 transition">${m.ads} ads</span>
+          <div class="w-full max-w-[42px] bg-gradient-to-t from-blue-600 to-indigo-500 rounded-t-lg transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-600" style="height: ${m.height}%"></div>
+        </div>
+      `).join('');
+    }
+
+    /* =========================================================================
+       4. KANBAN FUNNEL VIEW (Eugene Schwartz Stages)
+       ========================================================================= */
+    function renderKanban() {
+      const tofList = document.getElementById("kanbanTofList");
+      const mofList = document.getElementById("kanbanMofList");
+      const bofList = document.getElementById("kanbanBofList");
+      const swipeList = document.getElementById("kanbanSwipeList");
+
+      const tofAds = mockAdsDatabase.filter(a => a.funnelStage === "tof");
+      const mofAds = mockAdsDatabase.filter(a => a.funnelStage === "mof");
+      const bofAds = mockAdsDatabase.filter(a => a.funnelStage === "bof");
+
+      document.getElementById("kbCountTof").innerText = tofAds.length;
+      document.getElementById("kbCountMof").innerText = mofAds.length;
+      document.getElementById("kbCountBof").innerText = bofAds.length;
+      document.getElementById("kbCountSwipe").innerText = savedSwipeAds.length;
+
+      function renderKanbanCard(ad) {
+        return `
+          <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs hover:shadow-xs transition cursor-pointer" onclick="openAdModal('${ad.id}')">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-xs text-slate-900">${ad.brand}</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">${ad.activeDays}z active</span>
+            </div>
+            <p class="text-xs text-slate-800 font-semibold line-clamp-2 mb-2">"${ad.headline}"</p>
+            <div class="flex items-center justify-between text-[10px] text-slate-400">
+              <span>${ad.formatLabel.split(' ')[0]}</span>
+              <span class="text-indigo-600 font-semibold">${ad.hookType}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      tofList.innerHTML = tofAds.map(renderKanbanCard).join('');
+      mofList.innerHTML = mofAds.map(renderKanbanCard).join('');
+      bofList.innerHTML = bofAds.map(renderKanbanCard).join('');
+
+      if (savedSwipeAds.length === 0) {
+        swipeList.innerHTML = `
+          <div class="p-6 text-center text-slate-400 text-xs border border-dashed border-slate-300 rounded-xl">
+            Salvează reclamele favorite cu stea (⭐) din modalul de inspecție pentru a le grupa aici.
+          </div>
+        `;
+      } else {
+        swipeList.innerHTML = savedSwipeAds.map(renderKanbanCard).join('');
+      }
+    }
+
+    /* =========================================================================
+       5. AD INSPECTOR MODAL & ACTIONS
+       ========================================================================= */
+    function openAdModal(adId) {
+      const ad = mockAdsDatabase.find(a => a.id === adId);
+      if (!ad) return;
+      selectedAd = ad;
+
+      document.getElementById("modalBrandName").innerText = ad.brand;
+      document.getElementById("modalBrandAvatar").innerText = ad.avatar;
+      document.getElementById("modalAdId").innerText = `Meta Ad ID: ${ad.id}`;
+      document.getElementById("modalActiveStatus").innerText = ad.activeDays >= 45 
+        ? `🔥 Scaling (${ad.activeDays} Zile Active)` 
+        : `⚡ Active (${ad.activeDays} Zile)`;
+
+      document.getElementById("modalAdImage").src = ad.thumbnail;
+      document.getElementById("modalOverlayFormat").innerText = ad.formatLabel;
+      document.getElementById("modalOverlayHook").innerText = `"${ad.headline}"`;
+      document.getElementById("modalPlatformsText").innerText = `Canale: ${ad.platforms.join(', ')}`;
+      document.getElementById("modalMetaLibraryLink").href = `https://www.facebook.com/ads/library/?id=${ad.id}`;
+
+      document.getElementById("modalHookArchetype").innerText = ad.hookType;
+      document.getElementById("modalHookExplanation").innerText = `Unghi axat pe ${ad.hookType}: Captează atenția instantanee în primele 3 secunde și elimină rezistența la cumpărare.`;
+
+      document.getElementById("modalAdCopy").innerText = ad.primaryText;
+      document.getElementById("modalHeadline").innerText = ad.headline;
+      document.getElementById("modalCta").innerText = ad.cta;
+      document.getElementById("modalOfferDetails").innerText = `${ad.offer} (${ad.variationsCount} variații active în cont)`;
+
+      document.getElementById("adModal").classList.remove("hidden");
+    }
+
+    function closeAdModal() {
+      document.getElementById("adModal").classList.add("hidden");
+    }
+
+    function addCurrentAdToSwipe() {
+      if (!selectedAd) return;
+      if (!savedSwipeAds.some(a => a.id === selectedAd.id)) {
+        savedSwipeAds.push(selectedAd);
+        alert(`Reclama de la ${selectedAd.brand} a fost adăugată în Swipe File!`);
+        renderKanban();
+      } else {
+        alert("Această reclamă este deja în Swipe File!");
+      }
+    }
+
+    function stealHookToAi() {
+      closeAdModal();
+      switchTab('generator');
+      generateCustomStrategyPrompt(selectedAd);
+    }
+
+    /* =========================================================================
+       6. AI STRATEGY & PROMPT CAPSULE GENERATOR ("FEED TO ANOTHER AI")
+       ========================================================================= */
+    function selectStrategyFormat(format) {
+      currentStrategyType = format;
+      const b1 = document.getElementById("btnStratCopy");
+      const b2 = document.getElementById("btnStratUgc");
+      const b3 = document.getElementById("btnStratJson");
+
+      [b1, b2, b3].forEach(b => {
+        b.className = "p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl text-left shadow-2xs transition";
+        b.querySelector("span:last-child").className = "w-2.5 h-2.5 rounded-full bg-transparent border border-slate-300";
+      });
+
+      if (format === "copywriter") {
+        b1.className = "p-4 bg-white border-2 border-blue-600 rounded-xl text-left shadow-2xs transition";
+        b1.querySelector("span:last-child").className = "w-2.5 h-2.5 rounded-full bg-blue-600";
+        document.getElementById("promptTitle").innerText = "Prompt Master Copywriter pentru ChatGPT / Claude 3.5 Sonnet";
+      } else if (format === "ugc") {
+        b2.className = "p-4 bg-white border-2 border-blue-600 rounded-xl text-left shadow-2xs transition";
+        b2.querySelector("span:last-child").className = "w-2.5 h-2.5 rounded-full bg-blue-600";
+        document.getElementById("promptTitle").innerText = "Brief Script Video UGC (Hook 0-3s, Agitare, Mecanism, Ofertă)";
+      } else {
+        b3.className = "p-4 bg-white border-2 border-blue-600 rounded-xl text-left shadow-2xs transition";
+        b3.querySelector("span:last-child").className = "w-2.5 h-2.5 rounded-full bg-blue-600";
+        document.getElementById("promptTitle").innerText = "Capsulă Structurată JSON (Gata pentru API, Make, n8n)";
+      }
+
+      generateCustomStrategyPrompt(selectedAd);
+    }
+
+    function generateCustomStrategyPrompt(singleAd = null) {
+      const topAd = singleAd || mockAdsDatabase.find(a => a.activeDays >= 60) || mockAdsDatabase[0];
+      const output = document.getElementById("strategyPromptOutput");
+
+      if (currentStrategyType === "copywriter") {
+        output.value = `### ROLUL TĂU: Ești un Senior Direct-Response Copywriter & Media Buyer de talie mondială.
+
+### MISIUNEA:
+Creează 5 noi variații de reclame Meta (Facebook & Instagram) care să bată cea mai profitabilă reclamă a competitorului nostru direct (${topAd.brand}), care a rulat continuu timp de ${topAd.activeDays} ZILE.
+
+### DATELE EXTRACTE DIN RECLAMA COMPETITORULUI (Sursa: Meta Ads Library):
+- Brand: ${topAd.brand}
+- Hook Principal Validat: "${topAd.headline}"
+- Textul Reclamei Originale: 
+"""
+${topAd.primaryText}
+"""
+- Unghi Psihologic: ${topAd.hookType}
+- Structura Ofertei Originale: ${topAd.offer}
+- Call to Action: ${topAd.cta}
+- Format Validat: ${topAd.formatLabel}
+
+### INSTRUCȚIUNI DE GENERARE:
+1. Păstrează unghiul psihologic dovedit (${topAd.hookType}), dar fă primele 3 secunde (Hook-ul) mult mai vizual și provocator.
+2. Înlocuiește promisiunea competitorului cu un mecanism unic de acțiune (Unique Selling Mechanism).
+3. Structura fiecărei variații:
+   - [HOOK 0-3 SECUNDE]: 3 opțiuni de deschidere (Problemă, Curiozitate, Șoc/Contrarian).
+   - [AGITARE & INVALIDARE]: De ce soluțiile obișnuite dau greș.
+   - [MECANISMUL NOSTRU PROPRIETAR]: De ce produsul nostru funcționează fără efort.
+   - [OFERTA NOASTRĂ IRISISTIBILĂ]: Ofertă superioară competitorului (${topAd.offer}) + garanție fără risc.
+   - [CALL TO ACTION]: Clar și direct.
+4. Generează textele într-un ton conversațional, uman, non-corporatist.`;
+
+      } else if (currentStrategyType === "ugc") {
+        output.value = `### STORYBOARD & SCRIPT VIDEO UGC PENTRU CREATORI (Format 9:16 Reels / TikTok)
+Bazat pe Reclama Câștigătoare a competitorului ${topAd.brand} (Longevitate: ${topAd.activeDays} zile).
+
+-------------------------------------------------------------------------
+⏱️ SCENA 1: HOOK-UL VIZUAL & AUDITIV (Secundele 0-3)
+-------------------------------------------------------------------------
+🎥 Cadru Vizual: Prim-plan filmat cu telefonul mobil (stil autentic, non-profesionist). Creatorul ține în mână produsul obișnuit și îl respinge cu o grimasă de frustrare.
+💬 Replica Audio / Voce: "${topAd.headline} ...Dacă încă faci asta, oprește-te imediat!"
+📝 Text pe Ecran (Overlay): "NU MAI FACE ASTA DACĂ VREI REZULTATE 🛑"
+
+-------------------------------------------------------------------------
+⏱️ SCENA 2: IDENTIFICAREA DURERII & AGITARE (Secundele 3-10)
+-------------------------------------------------------------------------
+🎥 Cadru Vizual: B-roll rapid care arată eșecul produselor concurente sau problema cu care se confruntă utilizatorul.
+💬 Replica Audio: "Am aruncat sute de lei crezând că problema e la mine. Până când am aflat că 90% din produsele de pe piață nu au formula corectă..."
+
+-------------------------------------------------------------------------
+⏱️ SCENA 3: INTRODUCEREA MECANISMULUI & DEMONSTRAȚIA (Secundele 10-25)
+-------------------------------------------------------------------------
+🎥 Cadru Vizual: Creatorul deschide produsul nostru, arată textura/interfața/ușurința în utilizare. O demonstrație fără editări pompoase.
+💬 Replica Audio: "Asta este soluția care a schimbat totul. Folosește tehnologia [Mecanism Unic] care acționează din prima zi."
+
+-------------------------------------------------------------------------
+⏱️ SCENA 4: DOVADA SOCIALĂ & GARANȚIA (Secundele 25-45)
+-------------------------------------------------------------------------
+🎥 Cadru Vizual: Ecran împărțit cu recenzii reale de pe Trustpilot/Instagram sau cadru Înainte/După.
+💬 Replica Audio: "Peste 10.000 de oameni confirmă același lucru. Și cel mai bun lucru? Ai 60 de zile garanție fără niciun risc."
+
+-------------------------------------------------------------------------
+⏱️ SCENA 5: OFERTA & CTA (Secundele 45-60)
+-------------------------------------------------------------------------
+🎥 Cadru Vizual: Creatorul arată cutia sau butonul de comandă pe ecran.
+💬 Replica Audio: "Apasă pe link-ul de mai jos acum. Au o ofertă specială 1+1 Gratuit care expiră curând!"`;
+
+      } else {
+        const jsonCapsule = {
+          competitor_intelligence_capsule: {
+            source: "Meta Ads Library API v21.0",
+            extracted_at: new Date().toISOString(),
+            analyzed_ad: {
+              id: topAd.id,
+              brand: topAd.brand,
+              active_duration_days: topAd.activeDays,
+              validation_status: topAd.status.toUpperCase(),
+              ad_iterations_count: topAd.variationsCount,
+              hook_architecture: {
+                headline: topAd.headline,
+                archetype: topAd.hookType,
+                emotional_triggers: topAd.keyTags
+              },
+              primary_copy: topAd.primaryText,
+              offer_structure: {
+                raw_offer: topAd.offer,
+                cta: topAd.cta
+              },
+              distribution: {
+                format: topAd.formatLabel,
+                platforms: topAd.platforms
+              }
+            },
+            downstream_ai_recommendations: {
+              recommended_copywriting_framework: "PAS (Problem-Agitate-Solve) with Contrarian Mechanism",
+              target_longevity_benchmark: ">60 days active",
+              suggested_video_duration: "45-55 seconds"
+            }
+          }
+        };
+        output.value = JSON.stringify(jsonCapsule, null, 2);
+      }
+    }
+
+    function copyStrategyPrompt() {
+      const text = document.getElementById("strategyPromptOutput").value;
+      navigator.clipboard.writeText(text).then(() => {
+        const btnText = document.getElementById("copyPromptText");
+        btnText.innerText = "Copiat cu Succes! ✓";
+        setTimeout(() => { btnText.innerText = "Copiază Promptul"; }, 2000);
+      });
+    }
+
+    function downloadPromptFile() {
+      const text = document.getElementById("strategyPromptOutput").value;
+      const ext = currentStrategyType === "json" ? "json" : "txt";
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `meta_ad_strategy_${currentStrategyType}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function openStrategyModal() {
+      switchTab('generator');
+    }
+
+    /* =========================================================================
+       7. AI NATURAL LANGUAGE SEARCH BAR
+       ========================================================================= */
+    function handleSearchKey(event) {
+      if (event.key === "Enter") {
+        executeAiSearch();
+      }
+    }
+
+    function executeAiSearch() {
+      const query = document.getElementById("aiSearchInput").value.toLowerCase().trim();
+      if (!query) {
+        applyFilters();
+        return;
+      }
+
+      // Semantic matching keywords
+      const filtered = mockAdsDatabase.filter(ad => {
+        const fullString = `${ad.brand} ${ad.headline} ${ad.primaryText} ${ad.offer} ${ad.hookType} ${ad.keyTags.join(' ')} ${ad.formatLabel}`.toLowerCase();
+        
+        // Longevity intent
+        if (query.includes("vechi") || query.includes("longevive") || query.includes("scaling") || query.includes("peste 45") || query.includes("60")) {
+          if (ad.activeDays < 45) return false;
+        }
+
+        // Format intent
+        if (query.includes("video") || query.includes("reels") || query.includes("ugc")) {
+          if (ad.format !== "video" && ad.format !== "ugc") return false;
+        }
+
+        // Offer intent
+        if (query.includes("ofert") || query.includes("reducere") || query.includes("discount") || query.includes("1+1")) {
+          if (!ad.offer.toLowerCase().includes("ofert") && !ad.offer.toLowerCase().includes("reducere") && !ad.offer.toLowerCase().includes("1+1") && !ad.offer.toLowerCase().includes("gratuit")) return false;
+        }
+
+        // General search term match
+        const words = query.split(' ').filter(w => w.length > 2);
+        return words.some(w => fullString.includes(w));
+      });
+
+      currentAds = filtered;
+      renderGrid();
+      renderTable();
+      updateKpis(filtered);
+
+      const badge = document.getElementById("activeFilterBadge");
+      const desc = document.getElementById("filterDesc");
+      badge.classList.remove("hidden");
+      desc.innerText = `Căutare AI: "${query}" (${filtered.length} rezultate)`;
+    }
+
+    /* =========================================================================
+       8. AI SPY COPILOT CHAT ASSISTANT
+       ========================================================================= */
+    function toggleCopilot() {
+      const panel = document.getElementById("copilotPanel");
+      if (panel.classList.contains("hidden")) {
+        panel.classList.remove("hidden");
+      } else {
+        panel.classList.add("hidden");
+      }
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById("chatInput");
+      const message = input.value.trim();
+      if (!message) return;
+      input.value = "";
+      askCopilot(message);
+    }
+
+    function askCopilot(userText) {
+      const chatContainer = document.getElementById("chatMessages");
+
+      // Append User message
+      const userBubble = document.createElement("div");
+      userBubble.className = "flex items-start justify-end space-x-2";
+      userBubble.innerHTML = `
+        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs leading-relaxed max-w-[85%] shadow-2xs">
+          ${userText}
+        </div>
+      `;
+      chatContainer.appendChild(userBubble);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      // Simulate AI Assistant thinking & responding
+      setTimeout(() => {
+        const reply = generateAiCopilotResponse(userText);
+        const aiBubble = document.createElement("div");
+        aiBubble.className = "flex items-start space-x-2.5";
+        aiBubble.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">AI</div>
+          <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-slate-200 shadow-2xs text-slate-800 leading-relaxed text-xs space-y-2 max-w-[90%]">
+            ${reply}
+          </div>
+        `;
+        chatContainer.appendChild(aiBubble);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 600);
+    }
+
+    function generateAiCopilotResponse(query) {
+      const q = query.toLowerCase();
+
+      if (q.includes("vechi") || q.includes("longevive") || q.includes("top 3")) {
+        const top3 = [...mockAdsDatabase].sort((a, b) => b.activeDays - a.activeDays).slice(0, 3);
+        return `
+          <p class="font-bold text-slate-900">🏆 Top 3 cele mai longevive reclame (Confirmate Profitabile):</p>
+          <ol class="list-decimal pl-4 space-y-1.5 text-slate-700">
+            <li><b>${top3[0].brand}</b> (${top3[0].activeDays} zile active) - Hook: <i>"${top3[0].headline}"</i>. Funcționează pentru că folosește autoritatea dermatologului și un trial cu risc zero.</li>
+            <li><b>${top3[1].brand}</b> (${top3[1].activeDays} zile active) - Hook: <i>"${top3[1].headline}"</i>. Folosește contrastul puternic haos vs ordine (eliminarea Excel-ului).</li>
+            <li><b>${top3[2].brand}</b> (${top3[2].activeDays} zile active) - Hook: <i>"${top3[2].headline}"</i>. Lovește direct în frustrarea durerii colanților transparenți.</li>
+          </ol>
+          <button onclick="setLongevityFilter('scaling')" class="mt-2 text-blue-600 font-bold hover:underline block text-[11px]">&rarr; Filtrează tabelul cu reclamele Scaling (>45z)</button>
+        `;
+      }
+
+      if (q.includes("ofert") || q.includes("pret") || q.includes("discount")) {
+        return `
+          <p class="font-bold text-slate-900">💰 Analiza Strategiei de Ofertă a Concurenței:</p>
+          <p>Competitorii care scalează agresiv nu vând doar un produs izolat, ci folosesc <b>Risk Reversal (Inversarea Riscului)</b> masiv:</p>
+          <ul class="list-disc pl-4 space-y-1 text-slate-700">
+            <li><b>Garanții extinse</b>: 30 până la 60 de zile "fără întrebări" (ex: Curology, Gymshark).</li>
+            <li><b>Oferte Bundle / BOGO</b>: 1+1 Gratuit pentru a crește valoarea medie a comenzii (AOV) la MyProtein.</li>
+            <li><b>Trial Fără Card</b>: Reducerea la zero a fricii de angajament (Monday.com).</li>
+          </ul>
+          <p class="text-[11px] text-slate-500">Recomandare: Pentru noua ta campanie, oferă un pachet 2+1 sau un trial de 30 de zile cu retur gratuit.</p>
+        `;
+      }
+
+      if (q.includes("extrage") || q.includes("prompt") || q.includes("chatgpt") || q.includes("claude")) {
+        return `
+          <p class="font-bold text-slate-900">📝 Am extras structura optimă pentru ChatGPT / Claude!</p>
+          <p>Am compilat unghiurile principale din reclamele cu peste 60 de zile de rulare continuă.</p>
+          <button onclick="openStrategyModal()" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-xs shadow-xs hover:bg-emerald-700 transition">
+            Deschide Tab-ul de Export AI &rarr;
+          </button>
+        `;
+      }
+
+      if (q.includes("gymshark")) {
+        currentAds = mockAdsDatabase.filter(a => a.brand === "Gymshark");
+        renderGrid();
+        renderTable();
+        return `
+          <p>Am filtrat bordul pentru <b>Gymshark</b>! Ei au 14 variații active pe unghiul de rezistență la genuflexiuni ("squat-proof"). Reclama rulează de 84 de zile continuu pe Instagram Reels.</p>
+        `;
+      }
+
+      return `
+        <p>Am analizat interogarea ta: "<i>${query}</i>".</p>
+        <p>În baza de date actuală avem <b>${currentAds.length} reclame</b> active. Majoritatea competitorilor folosesc formate <b>Video 9:16 (UGC)</b> axate pe unghiul <b>Problem-Agitation</b> (crearea unei frustrări în primele 3 secunde urmată de prezentarea mecanismului unic).</p>
+        <p class="text-[11px] text-slate-500">Poți folosi tab-ul <b>Semrush Analytics</b> pentru a vedea matricea completă sau <b>Export AI</b> pentru prompturi gata de utilizat.</p>
+      `;
+    }
+
+    /* =========================================================================
+       9. API SETTINGS MODAL LOGIC
+       ========================================================================= */
+    function openApiModal() {
+      document.getElementById("apiModal").classList.remove("hidden");
+    }
+
+    function closeApiModal() {
+      document.getElementById("apiModal").classList.add("hidden");
+    }
+
+    function setApiMode(mode) {
+      apiMode = mode;
+      const bMock = document.getElementById("btnModeMock");
+      const bLive = document.getElementById("btnModeLive");
+      const liveInputs = document.getElementById("liveApiInputs");
+
+      if (mode === "mock") {
+        bMock.className = "p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 text-blue-700 font-bold text-left transition";
+        bLive.className = "p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-left transition";
+        liveInputs.classList.add("opacity-50", "pointer-events-none");
+      } else {
+        bLive.className = "p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 text-blue-700 font-bold text-left transition";
+        bMock.className = "p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-left transition";
+        liveInputs.classList.remove("opacity-50", "pointer-events-none");
+      }
+    }
+
+    function saveApiSettings() {
+      const dot = document.getElementById("apiStatusDot");
+      const text = document.getElementById("apiStatusText");
+
+      if (apiMode === "live") {
+        const token = document.getElementById("inputAccessToken").value;
+        if (!token) {
+          alert("Te rugăm să introduci un Access Token Meta Graph API valid pentru modul Live sau selectează Smart Mock Mode.");
+          return;
+        }
+        dot.className = "w-2 h-2 rounded-full bg-blue-500 pulse-dot";
+        text.innerText = "Meta API: Conectat Live";
+        alert("Conexiune Meta Graph API inițializată cu succes!");
+      } else {
+        dot.className = "w-2 h-2 rounded-full bg-emerald-500 pulse-dot";
+        text.innerText = "Meta API: Mock Mode Activ";
+      }
+      closeApiModal();
+    }
+  </script>
+</body>
+</html>
